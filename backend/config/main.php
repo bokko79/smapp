@@ -28,7 +28,7 @@ return [
                 'httpOnly' => true,
             ],
             'class' => 'common\components\User',
-            'identityClass' => '\dektrium\user\models\User',
+            'identityClass' => '\common\models\UserAccount',
             'enableAutoLogin' => true,
         ],
         'session' => [

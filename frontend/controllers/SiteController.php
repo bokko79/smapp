@@ -12,7 +12,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use dektrium\user\models\User;
+use common\models\UserAccount;
 use common\models\Log;
 use common\models\CcServices;
 use common\models\CcServicesSearch;
@@ -94,7 +94,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $user = \dektrium\user\models\User::findOne(Yii::$app->user->id);
+        $user = UserAccount::findOne(Yii::$app->user->id);
         return $this->render('index', [
                 'user' => $user,
             ]);
