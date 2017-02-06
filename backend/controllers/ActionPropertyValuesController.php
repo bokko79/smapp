@@ -77,6 +77,11 @@ class ActionPropertyValuesController extends Controller
     {
         $model = new CcActionPropertyValues();
 
+        if($actionPropertyValues = Yii::$app->request->get('CcActionPropertyValues')){
+            $model->action_property_id = !empty($actionPropertyValues['action_property_id']) ? $actionPropertyValues['action_property_id'] : null;
+            $model->property_value_id = !empty($actionPropertyValues['property_value_id']) ? $actionPropertyValues['property_value_id'] : null;
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

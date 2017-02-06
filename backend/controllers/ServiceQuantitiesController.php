@@ -77,6 +77,10 @@ class ServiceQuantitiesController extends Controller
     {
         $model = new CcServiceQuantities();
 
+        if($sQ = Yii::$app->request->get('CcServiceQuantities')){
+            $model->service_id = !empty($sQ['service_id']) ? $sQ['service_id'] : null;
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->service_id]);
         } else {

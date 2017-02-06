@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use common\models\Log;
 
 /**
  * ProvidersController implements the CRUD actions for CcIndustries model.
@@ -17,6 +18,18 @@ use yii\web\UploadedFile;
 class ProvidersController extends Controller
 {
     //public $layout = '/admin';
+
+    /**
+     * Event is triggered after changing users' email address.
+     * Triggered with \dektrium\user\events\UserEvent.
+     */
+    const EVENT_AFTER_VISIT = 'afterVisit';
+
+    // event init
+    public function init()
+    {
+        $this->on(self::EVENT_AFTER_VISIT, [$this, 'afterVisit']);
+    }
     
     /**
      * @inheritdoc
@@ -40,6 +53,8 @@ class ProvidersController extends Controller
      */
     public function actionView($id)
     {
+        $this->trigger(self::EVENT_AFTER_VISIT, new yii\base\Event(['sender' => $id]));
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -59,5 +74,11 @@ class ProvidersController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function afterVisit($event){        
+        $log = new Log;
+        $log->subject_id = $event->sender;
+        $log->logEvent(70);
     }
 }

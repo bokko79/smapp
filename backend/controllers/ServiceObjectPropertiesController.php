@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 /**
  * ServiceObjectPropertiesController implements the CRUD actions for CcServiceObjectProperties model.
@@ -63,8 +64,14 @@ class ServiceObjectPropertiesController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $query = \common\models\CcServiceObjectPropertyValues::find()->where(['service_object_property_id' => $id]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'propertyValues' => new ActiveDataProvider([
+                'query' => $query,
+            ]),
         ]);
     }
 
@@ -76,6 +83,11 @@ class ServiceObjectPropertiesController extends Controller
     public function actionCreate()
     {
         $model = new CcServiceObjectProperties();
+
+        if($objectProperties = Yii::$app->request->get('CcServiceObjectProperties')){
+            $model->service_id = !empty($objectProperties['service_id']) ? $objectProperties['service_id'] : null;
+            $model->object_property_id = !empty($objectProperties['object_property_id']) ? $objectProperties['object_property_id'] : null;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -132,5 +144,22 @@ class ServiceObjectPropertiesController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * Lists all ProviderServices models.
+     * @return mixed
+     */
+    public function actionModal($id=null)
+    {
+        if($id){
+            if($serviceObjectProperty = $this->findModel($id)) {
+                return $this->renderAjax('//services/_service_object_property_values', [
+                    'model' => $serviceObjectProperty,
+                    'object' => $serviceObjectProperty->objectProperty->object,
+                ]);
+            }
+        }
+        return;            
     }
 }

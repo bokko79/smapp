@@ -18,7 +18,7 @@ $session = Yii::$app->session;
 		    		<i class="fa fa-cube fa-3x"></i>
 		    	</div>
 		    	<div class="title">
-		    		<div class="head third regular"><?= Html::a(c($model->name), ['/auto/index/'], ['data'=>['method'=>'post', 'params'=>['CcServicesSearch[object_id]'=>$model->id]]]) ?></div>
+		    		<div class="head third regular"><?= Html::a(c($model->name), ['/autoindex/'], ['data'=>['method'=>'post', 'params'=>['CcServicesSearch[object_id]'=>$model->id]]]) ?></div>
 		    	</div>
 		    	   
 		    </div>

@@ -18,8 +18,8 @@ class CcObjectPropertyValuesSearch extends CcObjectPropertyValues
     public function rules()
     {
         return [
-            [['id', 'object_property_id', 'property_value_id', 'object_id', 'selected_value'], 'integer'],
-            [['value_type'], 'safe'],
+            [['id', 'object_property_id', 'property_value_id', 'object_id', 'file_id', 'selected_value', 'countable_value', 'default_part_no'], 'integer'],
+            [['value_type', 'value_class'], 'safe'],
         ];
     }
 
@@ -63,10 +63,14 @@ class CcObjectPropertyValuesSearch extends CcObjectPropertyValues
             'object_property_id' => $this->object_property_id,
             'property_value_id' => $this->property_value_id,
             'object_id' => $this->object_id,
+            'file_id' => $this->file_id,
             'selected_value' => $this->selected_value,
+            'countable_value' => $this->countable_value,
+            'default_part_no' => $this->default_part_no,
         ]);
 
         $query->andFilterWhere(['like', 'value_type', $this->value_type]);
+        $query->andFilterWhere(['like', 'value_class', $this->value_class]);
 
         return $dataProvider;
     }

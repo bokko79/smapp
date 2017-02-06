@@ -20,8 +20,8 @@ $state = $session->get('state');
 				    	</div>
 				    	<div class="title">
 				    		<div class="head major regular" style="line-height: 22px;">
-				    			<?= Html::a(c($model->object->tName), Url::to(['/s/'.slug($model->tName)]), []) ?>
-				    			<span class="fs_11 muted">[<?= c($model->tName) ?>]</span> 				    			
+				    			<?= Html::a(c($model->object->name), Url::to(['/s/'.slug($model->name)]), []) ?>
+				    			<span class="fs_11 muted">[<?= c($model->name) ?>]</span> 				    			
 				    			<?= Html::a('<i class="fa fa-bars"></i>&nbsp;'.Yii::t('app', 'Pregled ponuda'), Url::to(['/presentations', 'PresentationsSearch[service_id]'=>$model->id]), ['class'=>'btn btn-link btn-xs', 'style'=>'']) ?>
 				    			<?= Html::a('<i class="fa fa-plus"></i>&nbsp;'.Yii::t('app', 'Prati'), Url::to(), ['class'=>'btn btn-link btn-xs', 'style'=>'']) ?>
 				    		</div>

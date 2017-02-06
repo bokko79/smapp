@@ -37,6 +37,7 @@ class CcPropertyValues extends \yii\db\ActiveRecord
             [['property_id', 'value'], 'required'],
             [['property_id', 'selected_value', 'file_id'], 'integer'],
             [['value'], 'string', 'max' => 128],
+            [['value_class'], 'string'],
             [['hint', 'video_link'], 'string', 'max' => 256],
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif'],
         ];
@@ -51,6 +52,7 @@ class CcPropertyValues extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'property_id' => Yii::t('app', 'Property ID'),
             'value' => Yii::t('app', 'Value'),
+            'value_class' => Yii::t('app', 'Value Class'),
             'selected_value' => Yii::t('app', 'Selected Value'),
             'hint' => Yii::t('app', 'Hint'),
             'file_id' => Yii::t('app', 'Image ID'),

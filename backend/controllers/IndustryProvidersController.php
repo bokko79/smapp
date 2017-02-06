@@ -77,6 +77,14 @@ class IndustryProvidersController extends Controller
     {
         $model = new CcIndustryProviders();
 
+        if($industry = Yii::$app->request->get('CcIndustries')){
+            $model->industry_id = !empty($industry['industry_id']) ? $industry['industry_id'] : null;
+        }
+
+        if($provider = Yii::$app->request->get('CcProviders')){
+            $model->provider_id = !empty($provider['provider_id']) ? $provider['provider_id'] : null;
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             //$model->industry_name = $industry->name;
             //$model->property_name = $property->name;

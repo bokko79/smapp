@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\CcProviders */
@@ -23,15 +24,74 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 </p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'id',
+                    'name',
+                    'category_id',
+                    'file_id',
+                    'status',
+                    'hit_counter',
+                ],
+            ]) ?>
+        </div>
+        <div class="col-lg-8">
+            <?= Html::a('New Property', ['/provider-properties/create', 'CcProviderProperties[provider_id]' => $model->id], ['class' => 'btn btn-warning btn-sm']) ?>
+            <?= GridView::widget([
+                'dataProvider' => $properties,
+                'columns' => [
+                    'id',
+                    [
+                        'label'=>'Property',
+                        'format' => 'raw',
+                        'value'=>function ($data) {
+                            return Html::a($data->property->name, ['provider-properties/view', 'id' => $data->id]);
+                        },
+                    ],
+                    [
+                        'label'=>'Inheritance',
+                        'format' => 'raw',
+                        'value'=>function ($data) {
+                            return Html::a($data->provider->name, ['providers/view', 'id' => $data->provider_id]);
+                        },
+                    ],
+                    //'property_class',
+                    'value_default',
+                    // 'value_min',
+                    // 'value_max',
+                    // 'step',
+                    // 'pattern',
+                    [
+                        'attribute' => 'multiple_values',
+                        'format' => 'raw',
+                        'value'=>function ($data) {
+                            return $data->multiple_values==1 ? 'Yes' : 'No';
+                        },
+                    ],
+                    [
+                        'attribute' => 'specific_values',
+                        'format' => 'raw',
+                        'value'=>function ($data) {
+                            return $data->specific_values==1 ? 'Yes' : 'No';
+                        },
+                    ],
+                    // 'read_only',
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'template' => '{update}',
+                        'buttons' => [
+                            'update' => function ($url, $model, $key) {
+                                return \Yii::$app->user->can('manageCoreDatabase') ? Html::a('Update', ['/provider-properties/update', 'id' => $model->id], ['class' => '']) : '';
+                            },
+                        ],                        
+                    ],
+                ],
+            ]); ?>
+        </div>
+    </div>
+</div>
 
-<?= DetailView::widget([
-    'model' => $model,
-    'attributes' => [
-        'id',
-        'name',
-        'category_id',
-        'file_id',
-        'status',
-        'hit_counter',
-    ],
-]) ?>

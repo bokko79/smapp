@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
 
 /**
  * IndustriesController implements the CRUD actions for CcIndustries model.
@@ -65,8 +66,14 @@ class IndustriesController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $query = \common\models\CcObjectProperties::find()->where(['object_id' => $id]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'services' => new ActiveDataProvider([
+                'query' => \common\models\CcServices::find()->where(['industry_id' => $model->id]),
+            ]),
         ]);
     }
 

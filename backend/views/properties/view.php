@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </p>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-<?php echo $model->multiple_values==1 ? 4 : 12 ?>">
+        <div class="col-sm-<?php echo $model->specific_values==1 ? 4 : 12 ?>">
             <div class="card_container record-full grid-item fadeInUp animated" id="card_container" style="float:none;">
                 <div class="primary-context">
                     <div class="head"><?= c(Html::encode($this->title)) ?> <small class="gray-color">class: <?= $model->class ?></small></div>
@@ -82,10 +82,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td>
-                                Multiple Values
+                                Specific Values
                             </td>
                             <td>
-                                <?= $model->multiple_values==1 ? 'Yes' : 'No' ?>
+                                <?= $model->specific_values==1 ? 'Yes' : 'No' ?>
                             </td>
                         </tr>
                         <tr>
@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
-        <?php if($model->multiple_values==1): ?>
+        <?php if($model->specific_values==1): ?>
         <div class="col-sm-8">
             <div class="card_container record-full grid-item fadeInUp animated" id="card_container">
                 <div class="primary-context gray normal">
@@ -130,6 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::a($data->value, ['property-values/view', 'id' => $data->id]);
                                     },
                                 ],
+                                'value_class',
                                 [
                                     'attribute' => 'selected_value',
                                     'format' => 'raw',
@@ -139,7 +140,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                                 'file_id',
                                 'video_link',
-
                                 [
                                     'class' => 'yii\grid\ActionColumn',
                                     'urlCreator' => function ($action, $model, $key, $index) {
@@ -187,7 +187,7 @@ if($model->objectProperties): ?>
                                 'label'=>'Unit',
                                 'format' => 'raw',
                                 'value'=>function ($data) {
-                                    return $data->unit ? Html::a($data->unit->name, ['units/view', 'id' => $data->property_unit_id]) : null;
+                                    return $data->unit ? Html::a($data->unit->name, ['units/view', 'id' => $data->unit_id]) : null;
                                 },
                             ],
                             'property_class',

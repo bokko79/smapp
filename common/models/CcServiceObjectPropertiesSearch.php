@@ -18,7 +18,7 @@ class CcServiceObjectPropertiesSearch extends CcServiceObjectProperties
     public function rules()
     {
         return [
-            [['id', 'service_id', 'object_property_id', 'required', 'read_only'], 'integer'],
+            [['id', 'service_id', 'object_property_id', 'unit_id', 'unit_imperial_id', 'required', 'read_only', 'property_type'], 'integer'],
         ];
     }
 
@@ -61,6 +61,9 @@ class CcServiceObjectPropertiesSearch extends CcServiceObjectProperties
             'id' => $this->id,
             'service_id' => $this->service_id,
             'object_property_id' => $this->object_property_id,
+            'unit_id' => $this->unit_id,
+            'unit_imperial_id' => $this->unit_imperial_id,
+            'property_type' => $this->property_type,
             'required' => $this->required,
             'read_only' => $this->read_only,
         ]);

@@ -206,14 +206,6 @@ class CcServices extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getServiceObjectModels()
-    {
-        return $this->hasMany(CcServiceObjectModels::className(), ['service_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getServiceProviderProperties()
     {
         return $this->hasMany(CcServiceProviderProperties::className(), ['service_id' => 'id']);
@@ -241,14 +233,6 @@ class CcServices extends \yii\db\ActiveRecord
     public function getObject()
     {
         return $this->hasOne(CcObjects::className(), ['id' => 'object_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getServiceObjectContainers()
-    {
-        return $this->hasMany(CcServiceObjectContainers::className(), ['service_id' => 'id']);
     }
 
     /**
@@ -377,6 +361,38 @@ class CcServices extends \yii\db\ActiveRecord
     public function getUserServices()
     {
         return $this->hasMany(UserServices::className(), ['service_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function isBookmarked($user_id)
+    {
+        if($userServices = $this->userServices){
+            foreach($userServices as $userService){
+                if($userService->user_id == $user_id){
+                    return true;
+                    break;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function isActiveBookmark($user_id)
+    {
+        if($userServices = $this->userServices){
+            foreach($userServices as $userService){
+                if($userService->user_id == $user_id and $userService->status==1){
+                    return true;
+                    break;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -565,9 +581,345 @@ class CcServices extends \yii\db\ActiveRecord
 
                   
         }/* else {
-            $properties = $object->getProperties($object);
+            $properties = $object->getProperties();
         }*/
 
         return $properties;
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceType()
+    {
+        switch ($this->service_type){
+            case 1: $value = 'create'; break;
+            case 2: $value = 'read'; break;
+            case 3: $value = 'update'; break;
+            case 4: $value = 'delete'; break;
+            case 5: $value = 'rent'; break;
+            case 6: $value = 'fix'; break;
+            case 7: $value = 'deliver'; break;
+            case 8: $value = 'replace'; break;
+            case 9: $value = 'transport'; break;
+            case 10: $value = 'show'; break;
+            case 11: $value = 'perform'; break;
+            case 12: $value = 'copy_paste'; break;
+            case 13: $value = 'sell'; break;
+            case 14: $value = 'prepare'; break;
+            case 15: $value = 'install'; break;
+            case 16: $value = 'book'; break;
+            case 17: $value = 'organize'; break;
+            case 18: $value = 'save'; break;
+            case 19: $value = 'care'; break;
+            case 20: $value = 'represent'; break;
+            case 21: $value = 'buy'; break;
+            default:
+                $value = 'create';
+                break;
+        }
+        return $value;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceObjectOwnership()
+    {
+        switch ($this->object_ownership){
+            case 1: $value = 'providers'; break;
+            case 2: $value = 'users'; break;
+            case 3: $value = 'providers multiple'; break;
+            case 4: $value = 'users multiple'; break;
+            case 5: $value = 'providers 2bcreated'; break;
+            case 6: $value = 'users 2bcreated'; break;
+            case 7: $value = 'providers intangible'; break;
+            case 8: $value = 'users intangible'; break;
+            default:
+                $value = 'consumer';
+                break;
+        }
+        return $value;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceFile()
+    {
+        switch ($this->file){
+            case 1: $value = 'required'; break;
+            case 2: $value = 'optional'; break;
+            default:
+                $value = 'no';
+                break;
+        }
+        return $value;
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceAmount()
+    {
+        switch ($this->amount){
+            case 1: $value = 'required'; break;
+            case 2: $value = 'optional'; break;
+            default:
+                $value = 'no';
+                break;
+        }
+        return $value;
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceConsumer()
+    {
+        switch ($this->consumer){
+            case 1: $value = 'required'; break;
+            case 2: $value = 'optional'; break;
+            default:
+                $value = 'no';
+                break;
+        }
+        return $value;
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceConsumerChildren()
+    {
+        switch ($this->consumer_children){
+            case 1: $value = 'required'; break;
+            case 2: $value = 'optional'; break;
+            default:
+                $value = 'no';
+                break;
+        }
+        return $value;
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceLocation()
+    {
+        switch ($this->location){
+            case 1: $value = 'users'; break;
+            case 2: $value = 'users start-end'; break;
+            case 3: $value = 'users optional'; break;
+            case 4: $value = 'users optional start-end'; break;
+            case 5: $value = 'providers'; break;
+            default:
+                $value = 'no';
+                break;
+        }
+        return $value;
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceCoverage()
+    {
+        switch ($this->coverage){
+            case 1: $value = 'HQ only'; break;
+            case 2: $value = 'city'; break;
+            case 3: $value = 'region (up to 200km)'; break;
+            case 4: $value = 'country'; break;
+            case 5: $value = 'countries (up to 1000km)'; break;
+            case 6: $value = 'worldwide'; break;
+            default:
+                $value = 'within';
+                break;
+        }
+        return $value;
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceTime()
+    {
+        switch ($this->time){
+            case 1: $value = 'required'; break;
+            case 2: $value = 'asap'; break;
+            default:
+                $value = 'no';
+                break;
+        }
+        return $value;
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceDuration()
+    {
+        switch ($this->duration){
+            case 1: $value = 'required'; break;
+            case 2: $value = 'optional'; break;
+            case 3: $value = 'same as units'; break;
+            default:
+                $value = 'no';
+                break;
+        }
+        return $value;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceFrequency()
+    {
+        switch ($this->frequency){
+            case 1: $value = 'once'; break;
+            case 2: $value = 'return'; break;
+            case 3: $value = 'frequently'; break;
+            case 4: $value = 'indefinite'; break;
+            default:
+                $value = 'no';
+                break;
+        }
+        return $value;
+    }
+
+    // service object models = SOM
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServiceObjectModels()
+    {
+        $som = [];
+        if($serviceObjectProperties = $this->serviceObjectProperties){
+            foreach($serviceObjectProperties as $serviceObjectProperty){
+                if($serviceObjectProperty->property_type=='object_models'){
+                    if($serviceObjectPropertyValues = $serviceObjectProperty->serviceObjectPropertyValues){
+                        foreach($serviceObjectPropertyValues as $serviceObjectPropertyValue){
+                            if($serviceObjectPropertyValue->objectPropertyValue->object_id!=''){
+                                $som[] = $serviceObjectPropertyValue->objectPropertyValue->object;
+                            }
+                        }
+                    }/* else if($objectPropertyValues = $serviceObjectProperty->objectProperty->objectPropertyValues){
+                        foreach($objectPropertyValues as $objectPropertyValue){
+                            if($objectPropertyValue->object_id!=''){
+                                $som[] = $objectPropertyValue->object;
+                            }
+                        }
+                    }*/
+                    break;
+                }
+            }
+        }
+        return $som;
+    }
+
+    // SOM models properties
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSOMModelProperties($serviceObjectModel)
+    {
+        $somModelProperty = [];
+        if($serviceObjectProperties = $this->serviceObjectProperties){
+            foreach($serviceObjectProperties as $serviceObjectProperty){
+                if($serviceObjectProperty->property_type=='models' and $serviceObjectProperty->objectProperty->object==$serviceObjectModel){                    
+                    $somModelProperty[] = $serviceObjectProperty->objectProperty;
+                }
+            }
+        }
+        if($objectProperties = $serviceObjectModel->getProperties()){
+            foreach($objectProperties as $objectProperty){
+                if($objectProperty->property_type=='models' and !in_array($objectProperty, $somModelProperty)){                    
+                    $somModelProperty[] = $objectProperty;
+                }
+            }
+        }
+        return $somModelProperty;
+    }
+
+    // SOM models
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSOMModels($serviceObjectModel)
+    {
+        $somModels = [];
+        if($SOMModelProperties = $this->getSOMModelProperties($serviceObjectModel)){
+            foreach($SOMModelProperties as $SOMModelProperty){
+                if($SOMModelPropertyValues = $SOMModelProperty->objectPropertyValues){  
+                    foreach($SOMModelPropertyValues as $SOMModelPropertyValue){
+                        if($SOMModelPropertyValue->object){
+                            $somModels[] = $SOMModelPropertyValue->object;
+                        }
+                    }
+                }
+            }
+        }
+        return $somModels;
+    }
+
+    // SOMFM properties: text, numeric (units), options, boolean, count, files, issues
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSOMProperties($serviceObjectModel)
+    {
+        $somProperty = [];
+        if($serviceObjectProperties = $this->serviceObjectProperties){
+            foreach($serviceObjectProperties as $serviceObjectProperty){
+                if(($serviceObjectProperty->property_type=='text' or $serviceObjectProperty->property_type=='numeric' or $serviceObjectProperty->property_type=='boolean' or $serviceObjectProperty->property_type=='issues' or $serviceObjectProperty->property_type=='value' or $serviceObjectProperty->property_type=='datetime' or $serviceObjectProperty->property_type=='general' or $serviceObjectProperty->property_type=='other' or $serviceObjectProperty->property_type=='count') and $serviceObjectProperty->objectProperty->object==$serviceObjectModel){                    
+                    $somProperty[] = $serviceObjectProperty->objectProperty;
+                }
+            }
+        }
+        if($objectProperties = $serviceObjectModel->getProperties()){
+            foreach($objectProperties as $objectProperty){
+                if(($objectProperty->property_type=='text' or $objectProperty->property_type=='numeric' or $objectProperty->property_type=='boolean' or $objectProperty->property_type=='issues' or $objectProperty->property_type=='value' or $objectProperty->property_type=='datetime' or $objectProperty->property_type=='general' or $objectProperty->property_type=='other' or $objectProperty->property_type=='count') and !in_array($objectProperty, $somProperty)){
+                    $somProperty[] = $objectProperty;
+                }
+            }
+        }
+        return $somProperty;
+    }
+
+    // SOMFM parts: boolean, countables
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSOMParts($serviceObjectModel)
+    {
+        $somPartProperty = [];
+        if($serviceObjectProperties = $this->serviceObjectProperties){
+            foreach($serviceObjectProperties as $serviceObjectProperty){
+                if(($serviceObjectProperty->property_type=='parts' or $serviceObjectProperty->property_type=='owner') and $serviceObjectProperty->objectProperty->object==$serviceObjectModel){                    
+                    $somPartProperty[] = $serviceObjectProperty->objectProperty;
+                }
+            }
+        }
+        if($objectProperties = $serviceObjectModel->getProperties()){
+            foreach($objectProperties as $objectProperty){
+                if(($objectProperty->property_type=='parts' or $objectProperty->property_type=='owner') and !in_array($objectProperty, $somPartProperty)){                    
+                    $somPartProperty[] = $objectProperty;
+                }
+            }
+        }
+        return $somPartProperty;
+    }
+
+    // SOMFM part models
+    // SOMFMPFM properties: text, numeric (units), options, boolean, count, files, issues
+    // ..continue with parts (parts of part)
+
+    // SOMFM containers
+
+    // SOMFM container models
+    // SOMFMCM properties: text, numeric (units), options, boolean, count, files, issues
+    // SOMFMCM parts: boolean, countables
+    // SOMFMCM part models
+    // SOMFMCMPM properties: text, numeric (units), options, boolean, count, files, issues
+    // ...continue with container (containers of container)
 }

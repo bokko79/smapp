@@ -18,7 +18,10 @@ use common\models\CcServices;
 use common\models\CcServicesSearch;
 use common\models\CcObjects;
 use common\models\CcIndustries;
+use common\models\CcProviders;
 use common\models\CcActions;
+use yii\data\ActiveDataProvider;
+use yii\elasticsearch\Query;
 
 
 /**
@@ -26,7 +29,6 @@ use common\models\CcActions;
  */
 class SiteController extends Controller
 {
-
     const EVENT_CONTACT_US = 'afterContactUs';
 
     // event init
@@ -107,6 +109,31 @@ class SiteController extends Controller
      */
     public function actionHome()
     {
+        $queryObjects = new ActiveDataProvider([
+                    'query' => CcObjects::find()->limit(4),
+                ]);
+        $queryIndustries = new ActiveDataProvider([
+                    'query' => CcIndustries::find()->limit(4),
+                ]);
+        //$queryIndustries = ($q) ? $this->suggested_word($q) : null;
+        $queryActions = new ActiveDataProvider([
+                    'query' => CcActions::find()->limit(4),
+                ]);
+        
+        return $this->render('home', [         
+            'queryObjects' => $queryObjects,
+            'queryIndustries' => $queryIndustries,
+            'queryActions' => $queryActions,
+        ]);
+    }
+
+    /**
+     * Displays homepage.
+     *
+     * @return mixed
+     */
+    public function actionSearch()
+    {
         $request = Yii::$app->request;
         $session = Yii::$app->session;
 
@@ -121,15 +148,16 @@ class SiteController extends Controller
             }
         }
         $q = $request->get('q');
+        $queryObjects = new Query();
         $queryObjects = ($q) ?  new ActiveDataProvider([
-                    'query' => CcObjects::find()->joinWith(['t t'])->where(['like', 'name', $q])->andWhere('cc_objects.class != "abstract"')->groupBy('cc_objects.id'),
+                    'query' => CcObjects::find()->where(['like', 'name', $q])->andWhere('class = "object"')->groupBy('id'),
                 ]) : null;
         $queryIndustries = ($q) ? new ActiveDataProvider([
-                    'query' => CcIndustries::find()->joinWith(['t t'])->where(['like', 'name', $q])->groupBy('cc_industries.id'),
+                    'query' => CcIndustries::find()->where(['like', 'name', $q])->groupBy('id'),
                 ]) : null;
         //$queryIndustries = ($q) ? $this->suggested_word($q) : null;
         $queryActions = ($q) ? new ActiveDataProvider([
-                    'query' => CcActions::find()->joinWith(['t t'])->where(['like', 'name', $q])->groupBy('cc_actions.id'),
+                    'query' => CcActions::find()->where(['like', 'name', $q])->groupBy('id'),
                 ]) : null;
 
         $object = ($entity=='o' and $title) ? $this->findObjectByTitle($title) : null;
@@ -142,8 +170,7 @@ class SiteController extends Controller
         $dataProvider = $searchModel->search(['CcServicesSearch'=>['name'=>$q, 'industry_id'=>$industry ? $industry->id : null, 'action_id'=>$action ? $action->id : null, 'object_id'=>$object ? $object->id : null,]]);
 
         
-        return $this->render('home', [
-            //'searchModel' => $searchModel,
+        return $this->render('search', [
             'dataProvider' => $dataProvider,
             'renderIndex' => $renderIndex,
             'industry' => $industry,
@@ -159,19 +186,6 @@ class SiteController extends Controller
             'countActionsResults' => $this->countActionsResults($queryActions),
             'countObjectsResults' => $this->countObjectsResults($queryObjects),
         ]);
-    }
-
-    /**
-     * Displays homepage.
-     *
-     * @return mixed
-     */
-    public function actionSearch()
-    {
-        $user = \dektrium\user\models\User::findOne(Yii::$app->user->id);
-        return $this->render('search', [
-                'user' => $user,
-            ]);
     }
 
     /**

@@ -40,22 +40,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
-                'attribute' => 'property_unit_id',
+                'attribute' => 'unit_id',
                 'format' => 'raw',
                 'value'=>function ($data) {
-                    return $data->unit ? Html::a($data->unit->name, Url::to(['/units/view', 'id'=>$data->property_unit_id]), []) : null;
+                    return $data->unit ? Html::a($data->unit->name, Url::to(['/units/view', 'id'=>$data->unit_id]), []) : null;
                 },
             ],
-            // 'property_unit_imperial_id',
+            // 'unit_imperial_id',
             'property_class',
             'property_type',
-
             'input_type',
-            // 'value_default',
-            // 'value_min',
-            // 'value_max',
-            // 'step',
-            // 'pattern',
+            'value_default',
+            'value_min',
+            'value_max',
+            'step',
+            'pattern',
             // 'display_order',
             [
                 'attribute' => 'multiple_values',
@@ -71,8 +70,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->specific_values==1 ? 'Yes' : 'No';
                 },
             ],
-            // 'read_only',
-            // 'required',
+            'read_only',
+            'required',
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

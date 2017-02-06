@@ -18,7 +18,7 @@ class CcPropertiesSearch extends CcProperties
     public function rules()
     {
         return [
-            [['id', 'type', 'property_id', 'multiple_values', 'translatable_values'], 'integer'],
+            [['id', 'type', 'property_id', 'specific_values', 'translatable_values'], 'integer'],
             [['name', 'class'], 'safe'],
         ];
     }

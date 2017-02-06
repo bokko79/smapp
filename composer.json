@@ -21,7 +21,11 @@
         "dektrium/yii2-user": "0.9.*@dev",
         "2amigos/yii2-google-maps-library": "*",
         "kartik-v/yii2-widgets": "*",
-        "kartik-v/yii2-checkbox-x": "@dev"
+        "kartik-v/yii2-checkbox-x": "@dev",
+        "kartik-v/yii2-tree-manager": "@dev",
+        "kartik-v/yii2-tabs-x": "@dev",
+        "miloschuman/yii2-highcharts-widget": "*",
+        "yiisoft/yii2-elasticsearch": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

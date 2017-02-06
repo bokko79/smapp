@@ -11,7 +11,7 @@ use Yii;
  * @property string $name
  * @property integer $type
  * @property integer $property_id
- * @property integer $multiple_values
+ * @property integer $specific_values
  * @property integer $translatable_values
  * @property string $class
  * @property string $description
@@ -39,7 +39,7 @@ class CcProperties extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['type', 'property_id', 'multiple_values', 'translatable_values'], 'integer'],
+            [['type', 'property_id', 'specific_values', 'translatable_values'], 'integer'],
             [['name', 'name_akk'], 'string', 'max' => 64],
             [['class', 'description'], 'string', 'max' => 32],
             [['hint'], 'string', 'max' => 256],
@@ -56,7 +56,7 @@ class CcProperties extends \yii\db\ActiveRecord
            'name' => Yii::t('app', 'Name'),
            'type' => Yii::t('app', 'Type'),
            'property_id' => Yii::t('app', 'Property ID'),
-           'multiple_values' => Yii::t('app', 'Multiple Values'),
+           'specific_values' => Yii::t('app', 'Specific Values'),
            'translatable_values' => Yii::t('app', 'Translatable Values'),
            'class' => Yii::t('app', 'Class'),
            'description' => Yii::t('app', 'Description'),

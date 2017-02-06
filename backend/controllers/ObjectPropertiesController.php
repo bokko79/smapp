@@ -64,10 +64,20 @@ class ObjectPropertiesController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $object = $model->object;
+        $query = \common\models\CcObjectPropertyValues::find()->where(['object_property_id' => 0]);
+
+        if($values = $model->getAllValues()){
+            foreach($values as $value){
+                $query->orWhere(['id' => $value->id]);
+            }           
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'propertyValues' => new ActiveDataProvider([
-                'query' => \common\models\CcObjectPropertyValues::find()->where(['object_property_id' => $id]),
+                'query' => $query/*->orderBy('value_type')->groupBy('id')*/,
             ]),
         ]);
     }
@@ -122,9 +132,15 @@ class ObjectPropertiesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if($objectPropertyValues = $model->objectPropertyValues){
+            foreach ($objectPropertyValues as $key => $objectPropertyValue) {
+                $objectPropertyValue->delete();
+            }
+        }
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/objects/view', ['id'=>$model->object_id]]);
     }
 
     /**
@@ -149,14 +165,39 @@ class ObjectPropertiesController extends Controller
      */
     public function actionModal($id=null)
     {
-        if($id){
-            if($objectProperty = $this->findModel($id)) {
-                return $this->renderAjax('//objects/_object_property_values', [
-                    'model' => $objectProperty,
-                    'object' => $objectProperty->object,
-                ]);
-            }
+        if($id and $objectProperty = $this->findModel($id)){            
+            return $this->renderAjax('//objects/_object_property_values', [
+                'model' => $objectProperty,
+                'object' => $objectProperty->object,
+            ]);            
         }
         return;            
+    }
+
+    /**
+     * Creates a new CcObjects model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionParents($id, $parentId)
+    {
+        $newmodel = new CcObjectProperties();
+
+        if($object = \common\models\CcObjects::findOne($id) and $objectProperty = $this->findModel($parentId)){
+            $newmodel->attributes = $objectProperty->attributes;
+            $newmodel->object_id = $object->id;
+            $newmodel->save();
+
+            if($objectProperty->objectPropertyValues){
+                foreach($objectProperty->objectPropertyValues as $objectPropertyValue){
+                    $newModelValue = new \common\models\CcObjectPropertyValues();
+                    $newModelValue->attributes = $objectPropertyValue->attributes;
+                    $newModelValue->object_property_id = $newmodel->id;
+                    $newModelValue->save();
+                }
+            }
+        }
+            
+        return $this->redirect(['/objects/view', 'id'=>$id]);
     }
 }

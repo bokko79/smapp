@@ -77,11 +77,26 @@ class ServiceObjectPropertyValuesController extends Controller
     {
         $model = new CcServiceObjectPropertyValues();
 
+        if($objectPropertyValue = Yii::$app->request->get('CcServiceObjectPropertyValues')){
+            $model->service_object_property_id = !empty($objectPropertyValue['service_object_property_id']) ? $objectPropertyValue['service_object_property_id'] : null;
+            $serviceObjectProperty = \common\models\CcServiceObjectProperties::findOne($model->service_object_property_id);
+            $model->object_property_value_id = !empty($objectPropertyValue['object_property_value_id']) ? $objectPropertyValue['object_property_value_id'] : null;
+            $objectProperty = \common\models\CcObjectProperties::find()->where(['id'=>$serviceObjectProperty->object_property_id])->one();
+            $objectPropertyValues = \common\models\CcObjectPropertyValues::find()->joinWith('object')->where(['object_property_id'=>$objectProperty->id]);
+            if($serviceObjectPropertyValues = $serviceObjectProperty->serviceObjectPropertyValues){
+                foreach($serviceObjectPropertyValues as $serviceObjectPropertyValue){
+                    $objectPropertyValues->andWhere(['<>','cc_object_property_values.id', $serviceObjectPropertyValue->object_property_value_id]);
+                }
+            }
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'objectProperty' => $objectProperty,
+                'objectPropertyValues' => $objectPropertyValues->all(),
             ]);
         }
     }

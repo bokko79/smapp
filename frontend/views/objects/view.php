@@ -207,38 +207,43 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
 
-    <div class="col-sm-12">
-        <div class="card_container record-full grid-item fadeInUp animated" id="services">
-            <div class="primary-context gray normal">
-                <div class="head"><?= ($model->services) ? Html::a('Services', Url::to(['/services/index', 'CcServicesSearch[object_id]'=>$model->id]), []) : 'Services' ?></div>
-            </div>
-            <div class="secondary-context">
-                <?php /* GridView::widget([
-                    'dataProvider' => $methods,
-                    'columns' => [
-                        'id',
-                        'tName',
-                        [
-                            'class' => 'yii\grid\ActionColumn',
-                            'buttons' => [
-                                'view' => function ($url, $model, $key) {
-                                    return Html::a('<i class="material-icons">remove_red_eye</i>', ['view', 'id' => $model->id], ['class' => '']);
-                                },
+    <div class="row">
 
-                                'update' => function ($url, $model, $key) {
-                                    return \Yii::$app->user->can('manageCoreDatabase') ? Html::a('<i class="material-icons">edit</i>', ['update', 'id' => $model->id], ['class' => '']) : '';
-                                },
+        <div class="col-sm-12">
+            <div class="card_container record-full grid-item fadeInUp animated" id="services">
+                <div class="primary-context gray normal">
+                    <div class="head"><?= ($model->services) ? Html::a('Services', Url::to(['/services/index', 'CcServicesSearch[object_id]'=>$model->id]), []) : 'Services' ?></div>
+                    <div class="subhead"><?= Html::a('New Service', ['/services/create', 'CcServices[object_id]' => $model->id], ['class' => 'btn btn-warning btn-sm']) ?></div>
+                </div>
+                <div class="secondary-context">
+                    <?= GridView::widget([
+                        'dataProvider' => $services,
+                        'columns' => [
+                            'id',
+                            'action.name',
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'template' => '{service} {order} {list}',
+                                'buttons' => [
+                                    'service' => function ($url, $model, $key) {
+                                        return Html::a('Service', ['/services/view', 'id' => $model->id], ['class' => '']);
+                                    },
 
-                                'delete' => function ($url, $model, $key) {
-                                    return \Yii::$app->user->can('manageCoreDatabase') ? Html::a('<i class="material-icons">delete</i>', ['delete', 'id' => $model->id], ['class' => '', 'data' => [
-                                            'confirm' => 'Are you sure you want to delete this item?','method' => 'post']]) : '';
-                                },
-                            ],                       
+                                    'order' => function ($url, $model, $key) {
+                                        return Html::a('Order', ['view', 'id' => $model->id], ['class' => '']);
+                                    },
+
+                                    'list' => function ($url, $model, $key) {
+                                        return Html::a('List', ['update', 'id' => $model->id], ['class' => '']);
+                                    },
+                                ],                       
+                            ],
                         ],
-                    ],
-                ]); */ ?>
+                    ]); ?>
+                </div>
             </div>
         </div>
+            
     </div>
         
 </div>

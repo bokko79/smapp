@@ -45,6 +45,8 @@ class CcProviderProperties extends \yii\db\ActiveRecord
             [['step'], 'number'],
             [['value_default'], 'string', 'max' => 128],
             [['pattern'], 'string', 'max' => 32],
+            [['property_class'], 'string'],
+            [['value_min', 'value_max', 'value_default', 'step', 'pattern'], 'default', /*'skipOnEmpty' => true,*/ 'value' => null, /*'on' => 'insert'*/],
         ];
     }
 
@@ -57,6 +59,7 @@ class CcProviderProperties extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'provider_id' => Yii::t('app', 'Provider ID'),
             'property_id' => Yii::t('app', 'Property ID'),
+            'property_class' => Yii::t('app', 'Property Class'),
             'value_default' => Yii::t('app', 'Value Default'),
             'value_min' => Yii::t('app', 'Value Min'),
             'value_max' => Yii::t('app', 'Value Max'),
@@ -83,6 +86,14 @@ class CcProviderProperties extends \yii\db\ActiveRecord
     public function getProperty()
     {
         return $this->hasOne(CcProperties::className(), ['id' => 'property_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProviderPropertyValues()
+    {
+        return $this->hasMany(CcProviderPropertyValues::className(), ['provider_property_id' => 'id']);
     }
 
     /**

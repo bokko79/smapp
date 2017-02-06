@@ -45,6 +45,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'value'=> $model->object ? Html::a($model->object->name, Url::to(['/objects/view', 'id'=>$model->object_id]), []) : null,
         ],
         'value_type',
+        'value_class',
+        [
+            'label' => 'Countable',
+            'value'=> ($model->countable_value==1 or $model->countable_value==2) ? ($model->countable_value==1 ? 'Single' : 'Multiple') : 'No',
+        ],
+        'default_part_no',
         [
             'label' => 'Selected',
             'value'=> $model->selected_value==1 ? 'Yes' : 'No',

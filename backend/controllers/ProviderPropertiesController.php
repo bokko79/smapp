@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 /**
  * ProviderPropertiesController implements the CRUD actions for CcSkills model.
@@ -63,8 +64,13 @@ class ProviderPropertiesController extends Controller
      */
     public function actionView($id)
     {
+         $query = \common\models\CcProviderPropertyValues::find()->where(['provider_property_id' => $id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'propertyValues' => new ActiveDataProvider([
+                'query' => $query,
+            ]),
         ]);
     }
 
@@ -76,6 +82,10 @@ class ProviderPropertiesController extends Controller
     public function actionCreate()
     {
         $model = new CcProviderProperties();
+        if($providerProperties = Yii::$app->request->get('CcProviderProperties')){
+            $model->provider_id = !empty($providerProperties['provider_id']) ? $providerProperties['provider_id'] : null;
+            $model->property_id = !empty($providerProperties['property_id']) ? $providerProperties['property_id'] : null;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             //$model->industry_name = $industry->name;

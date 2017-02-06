@@ -10,7 +10,6 @@ use yii\helpers\ArrayHelper;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',

@@ -33,6 +33,8 @@ use kartik\widgets\FileInput;
             'changeOnReset' => false,           
         ]) ?>
 
+    <?= $form->field($model, 'property_class')->dropDownList([ 'public' => 'Public', 'private' => 'Private', 'protected' => 'Protected', ], ['prompt' => '']) ?>
+
     <?= $form->field($model, 'value_default')->input('text') ?>
 
     <?= $form->field($model, 'value_min')->input('number') ?>
@@ -43,9 +45,11 @@ use kartik\widgets\FileInput;
 
     <?= $form->field($model, 'pattern')->input('text') ?>
 
-    <?= $form->field($model, 'display_order')->input('number') ?>
+    <?= $form->field($model, 'display_order')->input('number', ['min'=>1, 'value'=>1]) ?>
 
     <?= $form->field($model, 'multiple_values')->checkbox()->label() ?>
+
+    <?= $form->field($model, 'specific_values')->checkbox()->label() ?>
 
     <?= $form->field($model, 'read_only')->checkbox()->label() ?>
 

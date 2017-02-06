@@ -6,12 +6,12 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\CsSkills */
 
-$this->title = $model->industry->name. '::'. $model->property->name;
+$this->title = $model->industry->name. '::'. $model->provider->name;
 $this->params['breadcrumbs'][] = ['label' => 'Industry Provider', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<h2><?= c(Html::encode($this->title)) ?> <small>id: <?= $model->id ?> required: <?= $model->required==1 ? 'yes' : 'no' ?></small></h2>
+<h2><?= c(Html::encode($this->title)) ?> <small>id: <?= $model->id ?></small></h2>
 
 <p>
     <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -29,8 +29,16 @@ $this->params['breadcrumbs'][] = $this->title;
     'model' => $model,
     'attributes' => [
         'id',
-        'industry_id',
-        'provider_id',
+        [
+            'label'=>'Industry',
+            'format'=>'raw',
+            'value'=> Html::a($model->industry->name, ['industries/view', 'id' => $model->industry_id]),
+        ],
+        [
+            'label'=>'Provider',
+            'format'=>'raw',
+            'value'=>Html::a($model->provider->name, ['providers/view', 'id' => $model->provider_id]),
+        ],
         'type',
     ],
 ]) ?>

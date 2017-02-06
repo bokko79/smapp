@@ -167,7 +167,7 @@ class CcObjects extends \yii\db\ActiveRecord
      */
     public function getServicesObjectContainers()
     {
-        return $this->hasMany(CcServiceObjectContainers::className(), ['object_container_id' => 'id']);
+        //return $this->hasMany(CcServiceObjectContainers::className(), ['object_container_id' => 'id']);
     }
 
     /**
@@ -186,20 +186,18 @@ class CcObjects extends \yii\db\ActiveRecord
      */
     public function getModels()
     {
-        //return $this->hasMany(CcObjects::className(), ['object_id' => 'id']);
         $models = [];
-        if ($objectProperties = $this->objectProperties){
+        if ($objectProperties = $this->getProperties()){
             foreach ($objectProperties as $key => $objectProperty) {
-                if($objectProperty->property_type=='model' and $objectPropertyValues = $objectProperty->objectPropertyValues){
+                if($objectProperty->property_type=='models' and $objectPropertyValues = $objectProperty->objectPropertyValues){
                     foreach ($objectPropertyValues as $objectPropertyValue){
-                        if($object = $objectPropertyValue->object){
+                        if($object = $objectPropertyValue->object and !in_array($objectPropertyValue->object, $models)){
                             $models[] = $object;
                         }                        
                     }
                 }
             }
         }
-
         return $models;
     }
 
@@ -209,11 +207,11 @@ class CcObjects extends \yii\db\ActiveRecord
     public function getParts()
     {
         $parts = [];
-        if ($objectProperties = $this->objectProperties){
+        if ($objectProperties = $this->getProperties()){
             foreach ($objectProperties as $key => $objectProperty) {
-                if($objectProperty->property_type=='part' and $objectPropertyValues = $objectProperty->objectPropertyValues){
+                if(($objectProperty->property_type=='parts' or $objectProperty->property_type=='owner') and $objectPropertyValues = $objectProperty->objectPropertyValues){
                     foreach ($objectPropertyValues as $objectPropertyValue){
-                        if($object = $objectPropertyValue->object){
+                        if($object = $objectPropertyValue->object and !in_array($objectPropertyValue->object, $parts)){
                             $parts[] = $object;
                         }                        
                     }
@@ -226,18 +224,64 @@ class CcObjects extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getContainers()
+    public function getObjectContainers()
     {
         $containers = [];
 
         if ($objectPropertyValues = $this->objectPropertyValues){
             foreach ($objectPropertyValues as $key => $objectPropertyValue){
                 if($objectPropertyValue->value_type=='part' && $object = $objectPropertyValue->objectProperty->object){
-                    $containers[] = $object;
+                    if($object->id!=$this->id and !in_array($object->id, $containers)){
+                        $containers[] = $object;
+                    }
                 }
             }
         }
         return $containers;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getContainers()
+    {
+        $containers = [];
+
+        if ($objectContainers = $this->objectContainers){
+            foreach ($objectContainers as $key => $objectContainer){               
+                $containers[] = $objectContainer;
+            }
+        }
+
+        foreach ($this->getPath($this) as $path){
+            if ($objectContainerspp = $path->objectContainers){
+                foreach ($objectContainerspp as $key => $objectContainerpp){  
+                    if(!in_array($objectContainerpp, $containers)){
+                        $containers[] = $objectContainerpp;
+                    }                          
+                }
+            }
+        }
+        return $containers;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMolds()
+    {
+        $molds = [];
+
+        if ($objectPropertyValues = $this->objectPropertyValues){
+            foreach ($objectPropertyValues as $key => $objectPropertyValue){
+                if($objectPropertyValue->value_type=='model' && $object = $objectPropertyValue->objectProperty->object){
+                    if($object->id!=$this->id and !in_array($object->id, $molds)){
+                        $molds[] = $object;
+                    }                    
+                }
+            }
+        }
+        return $molds;
     }
 
     /**
@@ -463,16 +507,18 @@ class CcObjects extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProperties($object)
+    public function getProperties()
     { 
         $properties = [];
+        $owner = [];
         $check = [];
 
         // properties of an object
-        if($objectProperties = $object->objectProperties){
+        if($objectProperties = $this->objectProperties){
             foreach($objectProperties as $objectProperty){
                 if(!in_array($objectProperty, $properties)){
-                    $properties[] = $objectProperty; 
+                    $objectProperty->inheritance = 'own';
+                    $properties[] = $objectProperty;                    
                     $check[] = $objectProperty->property_id;                   
                 }                
             }
@@ -481,11 +527,12 @@ class CcObjects extends \yii\db\ActiveRecord
         // protected properties of parent classes (inherited)
         // public properties of parent classes
         // default value from the nearest parent class
-        if($object->getPath($object)){
+        if($this->getPath($this)){
             foreach (array_reverse($this->getPath($this)) as $key => $objectpp) {
                 if($objectPropertiespp = $objectpp->objectProperties){
                     foreach($objectPropertiespp as $objectPropertypp){
                         if($objectPropertypp->property_class!='private' and !in_array($objectPropertypp, $properties) and !in_array($objectPropertypp->property_id, $check)){
+                            $objectPropertypp->inheritance = 'inherited';
                             $properties[] = $objectPropertypp;
                             $check[] = $objectPropertypp->property_id;
                         }
@@ -494,12 +541,28 @@ class CcObjects extends \yii\db\ActiveRecord
             }
         }
 
+        // protected and public properties of molds
+        if($molds = $this->molds){
+            foreach (array_reverse($molds) as $key => $mold) {
+                if($objectPropertiesmm = $mold->objectProperties){
+                    foreach($objectPropertiesmm as $objectPropertymm){
+                        if($objectPropertymm->property_class!='private' and !in_array($objectPropertymm, $properties) and !in_array($objectPropertymm->property_id, $check)){
+                            $objectPropertymm->inheritance = 'inherited';
+                            $properties[] = $objectPropertymm;
+                            $check[] = $objectPropertymm->property_id;
+                        }
+                    }
+                }                    
+            }
+        }
+
         // public properties of containers
-        if($containers = $object->containers){
+        if($containers = $this->containers){
             foreach (array_reverse($containers) as $key => $container) {
                 if($objectPropertiescc = $container->objectProperties){
                     foreach($objectPropertiescc as $objectPropertycc){
                         if($objectPropertycc->property_class=='public' and !in_array($objectPropertycc, $properties) and !in_array($objectPropertycc->property_id, $check)){
+                            $objectPropertycc->inheritance = 'inherited';
                             $properties[] = $objectPropertycc;
                             $check[] = $objectPropertycc->property_id;
                         }
@@ -514,21 +577,63 @@ class CcObjects extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getInheritedProperties($object)
-    {
+    public function getAllProperties()
+    { 
         $properties = [];
-            
-        if($object->getPath($object)){
-            foreach ($this->getPath($this) as $key => $objectpp) {
+        $owner = [];
+
+        // properties of an object
+        if($objectProperties = $this->objectProperties){
+            foreach($objectProperties as $objectProperty){
+                $objectProperty->inheritance = 'own';
+                $properties[] = $objectProperty;   
+            }
+        }
+
+        // protected properties of parent classes (inherited)
+        // public properties of parent classes
+        // default value from the nearest parent class
+        if($this->getPath($this)){
+            foreach (array_reverse($this->getPath($this)) as $key => $objectpp) {
                 if($objectPropertiespp = $objectpp->objectProperties){
                     foreach($objectPropertiespp as $objectPropertypp){
-                        if($objectPropertypp->property_class!='private'){
+                        if($objectPropertypp->property_class!='private'/* and !in_array($objectPropertypp, $properties) and !in_array($objectPropertypp->property_id, $check)*/){
+                            $objectPropertypp->inheritance = 'inherited';
                             $properties[] = $objectPropertypp;
                         }
                     }
                 }                    
             }
         }
+
+        // protected and public properties of molds
+        if($molds = $this->molds){
+            foreach (array_reverse($molds) as $key => $mold) {
+                if($objectPropertiesmm = $mold->objectProperties){
+                    foreach($objectPropertiesmm as $objectPropertymm){
+                        if($objectPropertymm->property_class!='private'/* and !in_array($objectPropertymm, $properties) and !in_array($objectPropertymm->property_id, $check)*/){
+                            $objectPropertymm->inheritance = 'inherited';
+                            $properties[] = $objectPropertymm;
+                        }
+                    }
+                }                    
+            }
+        }
+
+        // public properties of containers
+        if($containers = $this->containers){
+            foreach (array_reverse($containers) as $key => $container) {
+                if($objectPropertiescc = $container->objectProperties){
+                    foreach($objectPropertiescc as $objectPropertycc){
+                        if($objectPropertycc->property_class=='public'/* and !in_array($objectPropertycc, $properties) and !in_array($objectPropertycc->property_id, $check)*/){
+                            $objectPropertycc->inheritance = 'inherited';
+                            $properties[] = $objectPropertycc;
+                        }
+                    }
+                }                    
+            }
+        }
+
         return $properties;
     }
 
@@ -569,5 +674,41 @@ class CcObjects extends \yii\db\ActiveRecord
         } else {
             return $this->tName . $image;
         } 
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAllActions()
+    { 
+        $actions = [];
+
+        // object is model of service object
+        if($objectPropertyValues = $this->objectPropertyValues){
+            foreach($objectPropertyValues as $objectPropertyValue){
+                if($serviceObjectPropertyValues = $objectPropertyValue->serviceObjectPropertyValues){
+                    foreach($serviceObjectPropertyValues as $serviceObjectPropertyValue){
+                        $actions[] = $serviceObjectPropertyValue->service;
+                    }
+                }
+            }
+        }
+
+        // object is model of a model service object
+        if($models = $this->models){
+            foreach ($models as $model){
+                if($objectPropertyValues = $this->objectPropertyValues){
+                    foreach($objectPropertyValues as $objectPropertyValue){
+                        if($serviceObjectPropertyValues = $objectPropertyValue->serviceObjectPropertyValues){
+                            foreach($serviceObjectPropertyValues as $serviceObjectPropertyValue){
+                                $actions[] = $serviceObjectPropertyValue->service;
+                            }
+                        }
+                    }
+                }
+            }
+        }              
+
+        return $actions;
     }
 }

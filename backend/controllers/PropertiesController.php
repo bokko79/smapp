@@ -72,7 +72,7 @@ class PropertiesController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
             'propertyValues' => new ActiveDataProvider([
-                'query' => CcPropertyValues::find()->filterWhere(['property_id' => $id]),
+                'query' => CcPropertyValues::find()->where(['property_id' => $id]),
             ]),
             /*'industryProperties' => new ActiveDataProvider([
                 'query' => CcIndustryProperties::find()->filterWhere(['property_id' => $id]),
@@ -81,7 +81,7 @@ class PropertiesController extends Controller
                 'query' => CcActionProperties::find()->filterWhere(['property_id' => $id]),
             ]),*/
             'objectProperties' => new ActiveDataProvider([
-                'query' => CcObjectProperties::find()->filterWhere(['property_id' => $id]),
+                'query' => CcObjectProperties::find()->where(['property_id' => $id]),
             ]),
         ]);
     }

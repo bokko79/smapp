@@ -130,7 +130,7 @@ class CcIndustries extends \yii\db\ActiveRecord
      */
     public function getParent()
     {
-        return $this->hasOne(CcIndustries::className(), ['id' => 'parent_id']);
+        return $this->hasOne(CcIndustries::className(), ['id' => 'category_id']);
     }
 
     /**
@@ -138,7 +138,7 @@ class CcIndustries extends \yii\db\ActiveRecord
      */
     public function getIcon()
     {
-        return $this->sector->icon;
+        //return $this->icon;
     }
 
     /**
@@ -146,7 +146,7 @@ class CcIndustries extends \yii\db\ActiveRecord
      */
     public function getColor()
     {
-        return $this->sector->color;
+        //return $this->sector->color;
     }
     
 
@@ -250,7 +250,15 @@ class CcIndustries extends \yii\db\ActiveRecord
      */
     public function getProviders()
     {
-        return $this->hasMany(Provider::className(), ['industry_id' => 'id']);
+        //return $this->hasMany(Provider::className(), ['industry_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIndustryProviders()
+    {
+        return $this->hasMany(CcIndustryProviders::className(), ['industry_id' => 'id']);
     }
 
     /**

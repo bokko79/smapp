@@ -18,7 +18,7 @@ class CcServiceObjectPropertyValuesSearch extends CcServiceObjectPropertyValues
     public function rules()
     {
         return [
-            [['id', 'service_object_property_id', 'object_property_value_id'], 'integer'],
+            [['id', 'service_object_property_id', 'object_property_value_id', 'selected_value'], 'integer'],
         ];
     }
 

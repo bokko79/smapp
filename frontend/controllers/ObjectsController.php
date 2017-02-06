@@ -12,6 +12,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\data\ActiveDataProvider;
+use common\models\Log;
 
 /**
  * ObjectsController implements the CRUD actions for CcObjects model.
@@ -19,6 +20,18 @@ use yii\data\ActiveDataProvider;
 class ObjectsController extends Controller
 {
     //public $layout = '/admin';
+
+    /**
+     * Event is triggered after changing users' email address.
+     * Triggered with \dektrium\user\events\UserEvent.
+     */
+    const EVENT_AFTER_VISIT = 'afterVisit';
+
+    // event init
+    public function init()
+    {
+        $this->on(self::EVENT_AFTER_VISIT, [$this, 'afterVisit']);
+    }
     
     /**
      * @inheritdoc
@@ -45,18 +58,26 @@ class ObjectsController extends Controller
     {
         $model = $this->findModel($id);
         $query = \common\models\CcObjectProperties::find()->where(['object_id' => $model->id]);
-            
-        if($model->getPath($model)){
-            foreach ($model->getPath($model) as $key => $objectpp) {
-                if($objectPropertiespp = $objectpp->objectProperties){
-                    foreach($objectPropertiespp as $objectPropertypp){
-                        if($objectPropertypp->property_class!='private'){
-                            $query->orWhere(['object_id' => $objectpp->id]);
-                        }
-                    }
-                }              
+        $services = \common\models\CcServices::find()->where(['object_id' => $model->id]);
+        /*echo '<pre>';
+            print_r($model->getProperties());
+            die;*/
+        foreach($model->getProperties() as $inheritedObjectProperty){
+            $query->orWhere(['id' => $inheritedObjectProperty->id]);
+        }
+
+        foreach($model->getAllActions() as $action){
+            $services->orWhere(['id' => $action->id]);
+        }
+        if ($molds = $model->molds){
+            foreach($molds as $mold){
+                foreach($mold->getAllActions() as $action){
+                    $services->orWhere(['id' => $action->id]);
+                }
             }
         }
+
+        $this->trigger(self::EVENT_AFTER_VISIT, new yii\base\Event(['sender' => $id]));
 
         return $this->render('view', [
             'model' => $model,
@@ -69,9 +90,9 @@ class ObjectsController extends Controller
             'properties' => new ActiveDataProvider([
                 'query' => $query->orderBy('property_type')->groupBy('id'),
             ]),
-            /*'methods' => new ActiveDataProvider([
-                'query' => \common\models\CcServices::find()->where(['object_id' => $model->id]),
-            ]),*/
+            'services' => new ActiveDataProvider([
+                'query' => $services,
+            ]),
         ]);
     }
 
@@ -89,5 +110,11 @@ class ObjectsController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function afterVisit($event){        
+        $log = new Log;
+        $log->subject_id = $event->sender;
+        $log->logEvent(54);
     }
 }

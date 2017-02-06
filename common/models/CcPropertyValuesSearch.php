@@ -19,7 +19,7 @@ class CcPropertyValuesSearch extends CcPropertyValues
     {
         return [
             [['id', 'property_id', 'selected_value', 'file_id'], 'integer'],
-            [['value', 'hint'], 'safe'],
+            [['value', 'value_class', 'hint'], 'safe'],
         ];
     }
 
@@ -66,6 +66,7 @@ class CcPropertyValuesSearch extends CcPropertyValues
         ]);
 
         $query->andFilterWhere(['like', 'value', $this->value])
+            ->andFilterWhere(['like', 'value_class', $this->value_class])
             ->andFilterWhere(['like', 'hint', $this->hint]);
 
         return $dataProvider;

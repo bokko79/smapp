@@ -35,6 +35,8 @@ use kartik\widgets\FileInput;
 
     <?= $form->field($model, 'selected_value')->checkbox()->label() ?>
 
+    <?= $form->field($model, 'value_class')->dropDownList([ 'private' => 'Private', 'protected' => 'Protected', 'disabled' => 'Disabled',], ['prompt' => '',]) ?>
+
     <?= $form->field($model, 'imageFile')->widget(FileInput::classname(), [
                         'options' => [/*'multiple' => true, */'accept' => 'image/*'],
                         'pluginOptions' => [

@@ -7,9 +7,13 @@ use Yii;
 /**
  * This is the model class for table "cc_object_property_values".
  *
- * @property string $id
- * @property string $object_property_id
- * @property string $property_value_id
+ * @property integer $id
+ * @property integer $object_property_id
+ * @property integer $property_value_id
+ * @property integer $object_id
+ * @property integer $file_id
+ * @property integer $countable_value
+ * @property integer $default_part_no
  * @property integer $selected_value
  */
 
@@ -30,8 +34,9 @@ class CcObjectPropertyValues extends \yii\db\ActiveRecord
     {
         return [
             [['object_property_id'], 'required'],
-            [['object_property_id', 'property_value_id', 'object_id', 'selected_value'], 'integer'],
-            [['value_type'], 'string'],
+            [['object_property_id', 'property_value_id', 'object_id', 'file_id', 'selected_value', 'countable_value', 'default_part_no'], 'integer'],
+            [['value_type', 'value_class'], 'string'],
+            [['default_part_no'], 'default', 'value' => null,],
         ];
     }
 
@@ -44,7 +49,12 @@ class CcObjectPropertyValues extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'object_property_id' => Yii::t('app', 'Object Property ID'),
             'property_value_id' => Yii::t('app', 'Property Value ID'),
+            'object_id' => Yii::t('app', 'Object'),
+            'file_id' => Yii::t('app', 'File'),
             'value_type' => Yii::t('app', 'Value Type'),
+            'value_class' => Yii::t('app', 'Value Class'),
+            'countable_value' => Yii::t('app', 'Parts Countable?'),
+            'default_part_no' => Yii::t('app', 'Default number of parts'),
             'selected_value' => Yii::t('app', 'Selected Value'),
         ];
     }
@@ -72,6 +82,15 @@ class CcObjectPropertyValues extends \yii\db\ActiveRecord
     {
         return $this->hasOne(CcObjects::className(), ['id' => 'object_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFile()
+    {
+        return $this->hasOne(Files::className(), ['id' => 'file_id']);
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery

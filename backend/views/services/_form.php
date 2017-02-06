@@ -8,6 +8,7 @@ use kartik\widgets\DatePicker;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use kartik\widgets\FileInput;
+use kartik\checkbox\CheckboxX;
 ?>
 
 
@@ -51,53 +52,142 @@ use kartik\widgets\FileInput;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'service_type')->textInput() ?>
+    <?= $form->field($model, 'service_type')->dropDownList([ 
+                1 => 'create', 
+                2 => 'read', 
+                3 => 'update', 
+                4 => 'delete', 
+                5 => 'rent', 
+                6 => 'fix', 
+                7 => 'deliver', 
+                8 => 'replace',
+                9 => 'transport', 
+                10 => 'show', 
+                11 => 'perform', 
+                12 => 'copy_paste',
+                13 => 'sell', 
+                14 => 'prepare', 
+                15 => 'install', 
+                16 => 'book', 
+                17 => 'organize', 
+                18 => 'save', 
+                19 => 'care', 
+                20 => 'represent',
+                21 => 'buy',
+            ], ['prompt' => '']) ?>
 
     <?= $form->field($model, 'object_class')->dropDownList([ 'object' => 'Object', 'products' => 'Products', 'models' => 'Models', 'part' => 'Part', ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'object_ownership')->dropDownList([ 'user' => 'User', 'provider' => 'Provider', ], ['prompt' => '']) ?>
+    <?= $form->field($model, 'object_ownership')->dropDownList([ 
+                0 => 'consumer', 
+                1 => 'providers', 
+                2 => 'users', 
+                3 => 'providers multiple', 
+                4 => 'users multiple', 
+                5 => 'providers 2bcreated', 
+                6 => 'users 2bcreate', 
+                7 => 'providers intangible', 
+                8 => 'users intangible',
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'file')->textInput() ?>
+    <?= $form->field($model, 'file')->dropDownList([ 
+                0 => 'no', 
+                1 => 'required', 
+                2 => 'optional', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'amount')->textInput() ?>
+    <?= $form->field($model, 'amount')->dropDownList([ 
+                0 => 'no', 
+                1 => 'required', 
+                2 => 'optional', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'consumer')->textInput() ?>
+    <?= $form->field($model, 'consumer')->dropDownList([ 
+                0 => 'no', 
+                1 => 'required', 
+                2 => 'optional', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'consumer_children')->textInput() ?>
+    <?= $form->field($model, 'consumer_children')->dropDownList([ 
+                0 => 'no', 
+                1 => 'required', 
+                2 => 'optional', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'location')->textInput() ?>
+    <?= $form->field($model, 'location')->dropDownList([ 
+                0 => 'no', 
+                1 => 'users', 
+                2 => 'users start-end', 
+                3 => 'users or providers', 
+                4 => 'optional users start-end', 
+                5 => 'providers', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'coverage')->textInput() ?>
+    <?= $form->field($model, 'coverage')->dropDownList([ 
+                0 => 'within', 
+                1 => 'HQ only', 
+                2 => 'city', 
+                3 => 'region (up to 200km)', 
+                4 => 'country', 
+                5 => 'countries (up to 1000km)', 
+                6 => 'worldwide', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'shipping')->textInput() ?>
+    <?= $form->field($model, 'shipping')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
-    <?= $form->field($model, 'geospecific')->textInput() ?>
+    <?= $form->field($model, 'geospecific')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
-    <?= $form->field($model, 'time')->textInput() ?>
+    <?= $form->field($model, 'time')->dropDownList([ 
+                0 => 'no', 
+                1 => 'users required', 
+                2 => 'asap', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'duration')->textInput() ?>
+    <?= $form->field($model, 'duration')->dropDownList([ 
+                0 => 'no', 
+                1 => 'users required', 
+                2 => 'optional', 
+                3 => 'same as unit', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'frequency')->textInput() ?>
+    <?= $form->field($model, 'frequency')->dropDownList([ 
+                0 => 'no', 
+                1 => 'once', 
+                2 => 'return', 
+                3 => 'frequently', 
+                4 => 'indefinite', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'availability')->textInput() ?>
+    <?= $form->field($model, 'availability')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
-    <?= $form->field($model, 'installation')->textInput() ?>
+    <?= $form->field($model, 'installation')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
-    <?= $form->field($model, 'tools')->textInput() ?>
+    <?= $form->field($model, 'tools')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
-    <?= $form->field($model, 'turn_key')->textInput() ?>
+    <?= $form->field($model, 'turn_key')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
-    <?= $form->field($model, 'support')->textInput() ?>
+    <?= $form->field($model, 'support')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
-    <?= $form->field($model, 'ordering')->textInput() ?>
+    <?= $form->field($model, 'ordering')->dropDownList([ 
+                0 => 'no', 
+                1 => 'confirmation required', 
+                2 => 'automatic', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'pricing')->textInput() ?>
+    <?= $form->field($model, 'pricing')->dropDownList([ 
+                0 => 'no', 
+                1 => 'standard', 
+                2 => 'special', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'terms')->textInput() ?>
+    <?= $form->field($model, 'terms')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
-    <?= $form->field($model, 'labour_type')->textInput() ?>
+    <?= $form->field($model, 'labour_type')->dropDownList([ 
+                0 => 'equipment', 
+                1 => 'human', 
+            ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'process')->textInput() ?>
+    <?= $form->field($model, 'process')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
     <?= $form->field($model, 'dat')->dropDownList([ 'open' => 'Open', 'closed' => 'Closed', ], ['prompt' => '']) ?>
 

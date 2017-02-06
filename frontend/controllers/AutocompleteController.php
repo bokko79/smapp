@@ -12,6 +12,7 @@ use common\models\CcActions;
 use common\models\CcObjects;
 use yii\web\Request;
 use yii\web\Session;
+use yii\elasticsearch\Query;
 
 class AutocompleteController extends \yii\web\Controller
 {
@@ -30,7 +31,7 @@ class AutocompleteController extends \yii\web\Controller
     public function actionListServices($q = null, $id = null)
     {        
         $query = new \yii\db\Query;
-         $query->select('ser.id as id, ind.name AS industry, ser.name AS name')
+        $query->select('ser.id as id, ind.name AS industry, ser.name AS name')
             ->from('cc_industries AS ind')
             ->innerJoin('cc_services AS ser', 'ser.industry_id=ind.id')
             ->where(['like', 'ser.name', $q])
@@ -86,7 +87,7 @@ class AutocompleteController extends \yii\web\Controller
             ->from('cc_objects AS obj')
             ->innerJoin('cc_objects AS obj_p', 'obj_p.id=obj.object_id')
             ->where(['like', 'obj.name', $q])
-            ->andWhere('obj.class != "abstract"')
+            ->andWhere('obj.class = "object"')
             ->groupBy('obj.id')
             ->orderBy([ 'obj.name' => SORT_ASC]);
         $command = $query->createCommand();
@@ -204,6 +205,11 @@ class AutocompleteController extends \yii\web\Controller
             //$service = CcServices::findOne($post['id']);
             return $this->redirect(['/services/view/'.$post['id']]);
         }
+        // string
+        if(isset($post['name']) && $post['name']!=null && $post['name']!=''){
+            //$service = CcServices::findOne($post['id']);
+            return $this->redirect(['/site/search/?q='.$post['name']]);
+        }
         // tags
         /*if(isset($post['tag_id']) && $post['tag_id']!=null && $post['tag_id']!=''){
             $tag = CcTags::findOne($post['tag_id']);
@@ -232,5 +238,4 @@ class AutocompleteController extends \yii\web\Controller
 
         return $this->redirect(['/site/search']); 
     }
-
 }

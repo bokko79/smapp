@@ -38,8 +38,6 @@ use kartik\widgets\FileInput;
 
     <?= $form->field($model_trans, 'name_gender')->dropDownList(['m' => 'muški', 'f' => 'ženski', 'n' => 'srednji'], ['style'=>'width:50%']) */ ?>
 
-    <hr>
-
     <?= $form->field($model, 'object_id')->widget(Select2::classname(), [
             'data' => ArrayHelper::map(\common\models\CcObjects::find()->all(), 'id', 'name'),
             'options' => ['placeholder' => 'Izaberite...'],

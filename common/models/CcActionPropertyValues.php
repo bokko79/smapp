@@ -29,7 +29,7 @@ class CcActionPropertyValues extends \yii\db\ActiveRecord
     {
         return [
             [['action_property_id', 'property_value_id'], 'required'],
-            [['action_property_id', 'property_value_id', 'selected_value'], 'integer'],
+            [['action_property_id', 'property_value_id', 'object_id', 'selected_value'], 'integer'],
         ];
     }
 
@@ -42,6 +42,7 @@ class CcActionPropertyValues extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'action_property_id' => Yii::t('app', 'Action Property ID'),
             'property_value_id' => Yii::t('app', 'Property Value ID'),
+            'object_id' => Yii::t('app', 'Object'),
             'selected_value' => Yii::t('app', 'Selected Value'),
         ];
     }
@@ -59,7 +60,15 @@ class CcActionPropertyValues extends \yii\db\ActiveRecord
      */
     public function getPropertyValue()
     {
-        return $this->hasOne(CcPropertiesValues::className(), ['id' => 'property_value_id']);
+        return $this->hasOne(CcPropertyValues::className(), ['id' => 'property_value_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getObject()
+    {
+        return $this->hasOne(CcObjects::className(), ['id' => 'object_id']);
     }
 
     /**

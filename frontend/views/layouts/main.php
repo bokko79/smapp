@@ -44,6 +44,7 @@ AppAsset::register($this);
         ['label' => 'Log', 'url' => ['/site/log']],
         ['label' => 'About', 'url' => ['/site/about']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
+        ['label' => 'Dashboard', 'url' => ['/dashboard/home?username='.Yii::$app->user->identity->username]],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/user/registration/register']];

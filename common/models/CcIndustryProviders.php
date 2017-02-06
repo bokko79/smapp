@@ -51,9 +51,9 @@ class CcIndustryProviders extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'industry_id' => Yii::t('app', 'Industry ID'),
-            'provider_id' => Yii::t('app', 'Property ID'),
-            'type' => Yii::t('app', 'Value Default'),
+            'industry_id' => Yii::t('app', 'Industry'),
+            'provider_id' => Yii::t('app', 'Provider'),
+            'type' => Yii::t('app', 'Type'),
         ];
     }
 

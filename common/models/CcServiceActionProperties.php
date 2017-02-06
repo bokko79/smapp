@@ -43,6 +43,7 @@ class CcServiceActionProperties extends \yii\db\ActiveRecord
             [['step'], 'number'],
             [['value_default'], 'string', 'max' => 128],
             [['pattern'], 'string', 'max' => 32],
+            [['input_type', 'value_min', 'value_max', 'value_default', 'step', 'pattern'], 'default', /*'skipOnEmpty' => true,*/ 'value' => null, /*'on' => 'insert'*/],
         ];
     }
 

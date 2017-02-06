@@ -62,15 +62,16 @@ use yii\helpers\ArrayHelper;
                 '14' => 'url',
                 '15' => 'color',
                 '16' => 'date range',
+                '99' => 'file',
 
             ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'multiple_values')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
+    <?= $form->field($model, 'specific_values')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
     <?= $form->field($model, 'translatable_values')->widget(CheckboxX::classname(), ['pluginOptions'=>['size'=>'sm']]) ?>
 
     <?= $form->field($model, 'class')->dropDownList([ 
-                'types' => 'types',
+                'file' => 'file',
                 'product' => 'product',
                 'time' => 'time',
                 'parts' => 'parts',

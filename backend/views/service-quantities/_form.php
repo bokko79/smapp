@@ -18,23 +18,23 @@ use kartik\widgets\FileInput;
     'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_MEDIUM],
     'options' => ['enctype' => 'multipart/form-data'],
 ]); ?>
-    <?= $form->field($model, 'service_id')->textInput() ?>
+    <?= $form->field($model, 'service_id')->input('number') ?>
 
-    <?= $form->field($model, 'amount_default')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'amount_default')->input('number') ?>
 
-    <?= $form->field($model, 'amount_min')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'amount_min')->input('number') ?>
 
-    <?= $form->field($model, 'amount_max')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'amount_max')->input('number') ?>
 
-    <?= $form->field($model, 'amount_step')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'amount_step')->input('number', ['step'=>0.01]) ?>
 
-    <?= $form->field($model, 'consumer_default')->textInput() ?>
+    <?= $form->field($model, 'consumer_default')->input('number') ?>
 
-    <?= $form->field($model, 'consumer_min')->textInput() ?>
+    <?= $form->field($model, 'consumer_min')->input('number') ?>
 
-    <?= $form->field($model, 'consumer_max')->textInput() ?>
+    <?= $form->field($model, 'consumer_max')->input('number') ?>
 
-    <?= $form->field($model, 'consumer_step')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'consumer_step')->input('number') ?>
 
     <div class="row" style="margin:20px;">
         <div class="col-md-offset-3">

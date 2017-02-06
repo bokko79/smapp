@@ -43,6 +43,7 @@ class CcActionProperties extends \yii\db\ActiveRecord
             [['step'], 'number'],
             [['value_default'], 'string', 'max' => 128],
             [['pattern'], 'string', 'max' => 32],
+            [['value_min', 'value_max', 'value_default', 'step', 'pattern'], 'default', /*'skipOnEmpty' => true,*/ 'value' => null, /*'on' => 'insert'*/],
         ];
     }
 
@@ -123,5 +124,13 @@ class CcActionProperties extends \yii\db\ActiveRecord
     public function serviceActionProperty($service_id)
     {
         return CcServiceActionProperties::find()->where('action_property_id='.$this->id.' AND service_id='.$service_id)->one();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDisplayName()
+    {
+        return (($this->property) ? $this->property->name : null) . '  ' . (($this->action) ? $this->action->name : null);
     }
 }

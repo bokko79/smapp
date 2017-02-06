@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\CsIndustries */
@@ -22,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'method' => 'post',
         ],
     ]) ?>
+    <?= Html::a('Create New Industry Provider', ['/industry-providers/create', 'CcIndustries[industry_id]'=>$model->id], ['class' => 'btn btn-info']) ?>
 </p>
 
 <?= DetailView::widget([
@@ -35,3 +37,50 @@ $this->params['breadcrumbs'][] = $this->title;
         'hit_counter',
     ],
 ]) ?>
+
+<h4>Providers</h4>
+<?php foreach($model->industryProviders as $industryProvider){
+    echo Html::a($industryProvider->provider->name, ['providers/view', 'id' => $industryProvider->provider_id]) . '<br>';
+} ?>
+
+<h4>Services</h4>
+<?= GridView::widget([
+    'dataProvider' => $services,
+    'columns' => [
+        //['class' => 'yii\grid\SerialColumn'],
+
+        [
+            'label'=>'ID',
+            'format' => 'raw',
+            'value'=>function ($data) {
+                return Html::a($data->id, ['services/view', 'id' => $data->id]);
+            },
+        ],
+        'name',
+        [
+            'label'=>'Industry',
+            'format' => 'raw',
+            'value'=>function ($data) {
+                return Html::a($data->industry->name, ['industries/view', 'id' => $data->industry_id]);
+            },
+        ],
+        [
+            'label'=>'Action',
+            'format' => 'raw',
+            'value'=>function ($data) {
+                return Html::a($data->action->name, ['actions/view', 'id' => $data->action_id]);
+            },
+        ],
+        [
+            'label'=>'Object',
+            'format' => 'raw',
+            'value'=>function ($data) {
+                return $data->object ? Html::a($data->object->name, ['objects/view', 'id' => $data->object_id]) : null;
+            },
+        ],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{update}{delete}',                                  
+        ],
+    ],
+]); ?>

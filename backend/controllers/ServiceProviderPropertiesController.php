@@ -77,6 +77,11 @@ class ServiceProviderPropertiesController extends Controller
     {
         $model = new CcServiceProviderProperties();
 
+        if($providerProperties = Yii::$app->request->get('CcServiceProviderProperties')){
+            $model->service_id = !empty($providerProperties['service_id']) ? $providerProperties['service_id'] : null;
+            $model->provider_property_id = !empty($providerProperties['provider_property_id']) ? $providerProperties['provider_property_id'] : null;
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

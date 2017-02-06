@@ -77,6 +77,11 @@ class ServiceActionPropertyValuesController extends Controller
     {
         $model = new CcServiceActionPropertyValues();
 
+        if($actionPropertyValue = Yii::$app->request->get('CcServiceActionPropertyValues')){
+            $model->service_action_property_id = !empty($actionPropertyValue['service_action_property_id']) ? $actionPropertyValue['service_action_property_id'] : null;
+            $model->action_id = !empty($actionPropertyValue['action_id']) ? $actionPropertyValue['action_id'] : null;
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

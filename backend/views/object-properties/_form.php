@@ -33,15 +33,15 @@ use kartik\widgets\FileInput;
             'changeOnReset' => false,           
         ]) ?>
 
-        <?= $form->field($model, 'unit_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(\common\models\CcUnits::find()->all(), 'id', 'name'),
+    <?= $form->field($model, 'unit_id')->widget(Select2::classname(), [
+            'data' => ArrayHelper::map(\common\models\CcUnits::find()->where('measurement="metric"')->all(), 'id', 'name'),
             'options' => ['placeholder' => 'Izaberite...'],
             'language' => 'sr-Latn',
             'changeOnReset' => false,           
         ]) ?>
 
-        <?= $form->field($model, 'unit_imperial_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(\common\models\CcUnits::find()->all(), 'id', 'name'),
+    <?= $form->field($model, 'unit_imperial_id')->widget(Select2::classname(), [
+            'data' => ArrayHelper::map(\common\models\CcUnits::find()->where('measurement="imperial"')->all(), 'id', 'name'),
             'options' => ['placeholder' => 'Izaberite...'],
             'language' => 'sr-Latn',
             'changeOnReset' => false,           
@@ -49,7 +49,22 @@ use kartik\widgets\FileInput;
 
     <?= $form->field($model, 'property_class')->dropDownList([ 'public' => 'Public', 'private' => 'Private', 'protected' => 'Protected', ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'property_type')->dropDownList([ 'general' => 'General', 'text' => 'Text', 'model' => 'Model', 'part' => 'Part', 'empty' => 'Empty', 'numeric' => 'Numeric', 'file' => 'File',], ['prompt' => '']) ?>
+    <?= $form->field($model, 'property_type')->dropDownList([ 
+                'general' => 'General', 
+                'text' => 'Text', 
+                'numeric' => 'Numeric',
+                'models' => 'Models', 
+                'parts' => 'Parts', 
+                'count' => 'Count',                 
+                'files' => 'Files', 
+                'issues' => 'Issues',
+                'boolean' => 'Boolean',
+                'datetime' => 'Date/Time',
+                'owner' => 'Owner',
+                'values' => 'Property values',
+                'container' => 'Container', 
+                'other' => 'Other', 
+            ], ['prompt' => '']) ?>
 
     <?= $form->field($model, 'input_type')->dropDownList([ 
                 '1' => 'number',
@@ -92,7 +107,7 @@ use kartik\widgets\FileInput;
 
     <?= $form->field($model, 'pattern')->input('text') ?>
 
-    <?= $form->field($model, 'display_order')->input('number', ['min'=>1]) ?>
+    <?= $form->field($model, 'display_order')->input('number', ['min'=>1, 'value'=>1]) ?>
 
     <?= $form->field($model, 'multiple_values')->checkbox()->label() ?>
 

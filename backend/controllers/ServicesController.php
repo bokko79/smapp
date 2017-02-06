@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
 
 /**
  * ServicesController implements the CRUD actions for CcServices model.
@@ -64,8 +65,15 @@ class ServicesController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $object = $model->object;
+        $query = \common\models\CcServiceObjectProperties::find()->where(['service_id' => $id]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'properties' => new ActiveDataProvider([
+                'query' => $query,
+            ]),
         ]);
     }
 
@@ -87,6 +95,7 @@ class ServicesController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'modelQuantities' => $modelQuantities,
             ]);
         }
     }

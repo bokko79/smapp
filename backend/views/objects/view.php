@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
+use miloschuman\highcharts\Highcharts;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\CcObjects */
@@ -23,13 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <p>
                         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
-                        <?php /* Html::a('Delete', ['delete', 'id' => $model->id], [
+                        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
                             'class' => 'btn btn-danger',
                             'data' => [
                                 'confirm' => 'Are you sure you want to delete this item?',
                                 'method' => 'post',
                             ],
-                        ]) */ ?>
+                        ]) ?>
                         <?= Html::a('Add New Child', Url::to(['/objects/create', 'CcObjects[object_id]'=>$model->id]), ['class' => 'btn btn-primary']) ?>
                         <?= Html::a('Services', Url::to('#services'), ['class' => 'btn btn-link']) ?>
                     </p>
@@ -38,49 +39,29 @@ $this->params['breadcrumbs'][] = $this->title;
                     <tr>
                         <td class="body-area">
                             <div class="primary-context">
-                                <div class="head">Karakteristike</div>
-                                
+                                <div class="head">Karakteristike</div>                                
                             </div>
                             <div class="secondary-context cont">
                                 <table class="table table-striped">                                
-                                    <tr>
-                                        <td>
-                                            Path
-                                        </td>
+                                    <tr><td>Path</td>
                                         <td>
                                             <?php foreach ($model->getPath($model) as $path){
                                                 echo Html::a(c($path->name), ['view', 'id'=>$path->id]) . ' / ';
                                             } ?> <?= c($model->name) ?>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            Class
-                                        </td>
-                                        <td>
-                                            <?= $model->class ?>
-                                        </td>
+                                    <tr><td>Class</td>
+                                        <td><?= $model->class ?></td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            Level
-                                        </td>
-                                        <td>
-                                            <?= $model->level ?>
-                                        </td>
+                                    <tr><td>Level</td>
+                                        <td><?= $model->level ?></td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            Parent
-                                        </td>
+                                    <tr><td>Parent</td>
                                         <td><h4><b>
                                             <?= $model->parent ? Html::a(c($model->parent->name), ['view', 'id'=>$model->parent->id]) : null ?></b></h4>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            Children
-                                        </td>
+                                    <tr><td>Children</td>
                                         <td>
                                             <?php
                                                 foreach ($model->children as $key => $child){
@@ -88,10 +69,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 } ?>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr><td>Molds</td>
                                         <td>
-                                            Parts
+                                            <?php
+                                                foreach ($model->molds as $key => $mold){
+                                                    echo Html::a(c($mold->name), ['view', 'id'=>$mold->id]) . ($key==count($model->molds)-1 ? null : ' <br> ');
+                                                } ?>
                                         </td>
+                                    </tr>
+                                    <tr><td>Models</td>
+                                        <td>
+                                            <?php
+                                                foreach ($model->models as $key => $mod){
+                                                    echo Html::a(c($mod->name), ['view', 'id'=>$mod->id]) . ($key==count($model->models)-1 ? null : ' <br> ');
+                                                } ?>
+                                        </td>
+                                    </tr>
+                                    <tr><td>Parts</td>
                                         <td>
                                             <?php
                                                 foreach ($model->parts as $key => $part){
@@ -99,21 +93,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 } ?>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            Containers
-                                        </td>
+                                    <tr><td>Containers</td>
                                         <td>
                                             <?php
-                                                foreach ($model->containers as $key => $container){
-                                                    echo Html::a(c($container->name), ['view', 'id'=>$container->id]) . ($key==count($model->containers)-1 ? null : ' <br> ');
+                                                foreach ($model->objectContainers as $key => $container){
+                                                    echo Html::a(c($container->name), ['view', 'id'=>$container->id]) . ($key==count($model->objectContainers)-1 ? null : ' <br> ');
                                                 } ?>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            Siblings
-                                        </td>
+                                    <tr><td>Siblings</td>
                                         <td>
                                             <?php
                                                 if($model->parent){
@@ -122,35 +110,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     }
                                                 } ?>
                                         </td>
+                                    </tr>                                    
+                                    <tr><td>Favourable</td>
+                                        <td><?= $model->favour==1 ? 'Yes' : 'No' ?></td>
                                     </tr>
-                                    
-                                    <tr>
-                                        <td>
-                                            Favourable
-                                        </td>
-                                        <td>
-                                            <?= $model->favour==1 ? 'Yes' : 'No' ?>
-                                        </td>
+                                    <tr><td>Hint</td>
+                                        <td><?= $model->tHint ?></td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            Hint
-                                        </td>
-                                        <td>
-                                            <?= $model->tHint ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Description
-                                        </td>
-                                        <td>
-                                            <?= $model->tDescription ?>
-                                        </td>
+                                    <tr><td>Description</td>
+                                        <td><?= $model->tDescription ?></td>
                                     </tr>
                                 </table>
-                                
-                                 
                             </div>
                         </td>
                         <td class="media-area 200">
@@ -198,7 +168,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                             ],
                             'property_class',
-                            'property_type',
+                            [
+                                'attribute' => 'property_type',
+                                'format' => 'raw',
+                                'value'=>function ($data) {
+                                    return ($data->property_type=='parts' or $data->property_type=='models') ? Html::a($data->property_type, Url::to(), ['data-toggle'=>'modal', 'data-backdrop'=>false,  'data-target'=>'#object-property-values-modal'.$data->id]) : $data->property_type;
+                                },
+                            ],
                             'value_default',
                             // 'value_min',
                             // 'value_max',
@@ -208,7 +184,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'multiple_values',
                                 'format' => 'raw',
                                 'value'=>function ($data) {
-                                    return $data->multiple_values==1 ? Html::a('Yes', Url::to(), ['data-toggle'=>'modal', 'data-backdrop'=>false,  'data-target'=>'#object-property-values-modal'.$data->id]) : 'No';
+                                    return $data->multiple_values==1 ? 'Yes' : 'No';
                                 },
                             ],
                             [
@@ -232,6 +208,53 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]); ?>
                 </div>
             </div>
+            <div>
+                <?php foreach($properties->getModels() as $objectProperty){
+                    if($objectProperty->property_type=='parts' or $objectProperty->property_type=='integral_part'){
+                        echo \Yii::$app->user->can('manageCoreDatabase') ? Html::a('Copy ' . $objectProperty->id, ['/object-properties/parents', 'id' => $model->id, 'parentId' => $objectProperty->object_id], ['class' => '']).'<br>' : '';
+                    }                    
+                } ?>
+            </div>
+            <div>
+                <?php foreach($model->getProperties() as $objectProperty){
+                    if($objectProperty->inheritance=='inherited' and ($objectProperty->property_type=='parts' or $objectProperty->property_type=='models')){
+                        echo $objectProperty->property->name.'<ul>';
+                        foreach($objectProperty->getAllPropertyValues($model) as $value){
+                            echo $value->object ? '<li>'.$value->object->name.'</li>' : '<li>'.$value->propertyValue->value.'</li>';
+                        }
+                        echo '</ul>';
+                    }                    
+                } ?>
+            </div>
+            <?= Highcharts::widget([
+               'options' => [
+					'title' => ['text' => $model->name.' Price',/* 'x'=>-20*/],
+					'subtitle' => ['text' => 'Source: WorldClimate.com', /*'x'=>-20*/],
+					'xAxis' => [
+						'categories' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+					],
+					'yAxis' => [
+						'title' => ['text' => 'Temperature (°C)'],
+						//'plotLines' => ['value'=>0, 'width'=>1, 'color'=>'#808080'],
+					],
+					'series' => [
+						['name' => 'Tokyo', 'data' => [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]],
+						/*['name' => 'New York', 'data' => [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]],*/
+						['name' => 'Berlin', 'data' => [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]],
+						/*['name' => 'London', 'data' => [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]]*/
+					],
+                    'tooltip' => [
+                    	'valueSuffix' => '°C'
+                    ],
+                    'legend' => [
+                    	'layout' => 'vertical',
+                        'align' => 'right',
+                        'verticalAlign' => 'middle',
+                        'borderWidth' => 0,
+                    ],
+               ]
+            ]); ?>
         </div>
             
     </div>
@@ -279,14 +302,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <?php 
-    if($oproperties = $model->getProperties($model)){
+    if($oproperties = $model->getProperties()){
         foreach($oproperties as $oproperty){
-            if($oproperty->multiple_values==1){
+            if($oproperty->property_type=='parts' or $oproperty->property_type=='models' or $oproperty->property_type=='owner'){
                 Modal::begin([
                 'id'=>'object-property-values-modal'.$oproperty->id,
                 'size'=>Modal::SIZE_SMALL,
                 'class'=>'overlay_modal',
-                'header'=> 'Property values '.Html::a($oproperty->property->tName, Url::to(['/object-property-values/index', 'CcObjectPropertyValuesSearch[object_property_id]'=>$oproperty->id])),
+                'header'=> 'Property values '.Html::a($oproperty->property->name, Url::to(['/object-property-values/index', 'CcObjectPropertyValuesSearch[object_property_id]'=>$oproperty->id])),
             ]); ?>
                 <div id="loading"><i class="fa fa-cog fa-spin fa-3x gray-color"></i></div>
             <?php Modal::end();

@@ -70,22 +70,24 @@ class ObjectsController extends Controller
     {
         $model = $this->findModel($id);
         $query = \common\models\CcObjectProperties::find()->where(['object_id' => $id]);
-        
-        foreach($model->getProperties($model) as $inheritedObjectProperty){
+        $services = \common\models\CcServices::find()->where(['object_id' => $model->id]);
+        /*echo '<pre>';
+            print_r($model->getProperties());
+            die;*/
+        foreach($model->getProperties() as $inheritedObjectProperty){
             $query->orWhere(['id' => $inheritedObjectProperty->id]);
         }
-            
-        /*if($model->getPath($model)){
-            foreach ($model->getPath($model) as $key => $objectpp) {
-                if($objectPropertiespp = $objectpp->objectProperties){
-                    foreach($objectPropertiespp as $objectPropertypp){
-                        if($objectPropertypp->property_class!='private'){
-                            $query->orWhere(['id' => $objectPropertypp->id]);
-                        }
-                    }
-                }              
+
+        foreach($model->getAllActions() as $action){
+            $services->orWhere(['id' => $action->id]);
+        }
+        if ($molds = $model->molds){
+            foreach($molds as $mold){
+                foreach($mold->getAllActions() as $action){
+                    $services->orWhere(['id' => $action->id]);
+                }
             }
-        }*/
+        }
 
         return $this->render('view', [
             'model' => $model,
@@ -99,7 +101,7 @@ class ObjectsController extends Controller
                 'query' => $query->orderBy('property_type')->groupBy('id'),
             ]),
             'services' => new ActiveDataProvider([
-                'query' => \common\models\CcServices::find()->where(['object_id' => $model->id]),
+                'query' => $services,
             ]),
         ]);
     }
@@ -202,5 +204,5 @@ class ObjectsController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
+    }    
 }

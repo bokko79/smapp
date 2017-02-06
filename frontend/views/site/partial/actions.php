@@ -14,7 +14,7 @@ use kartik\tabs\TabsX;
             <i class="fa fa-flag-o"></i>
         </div>
         <div class="title">
-            <div class="head grand"><?= c($action->tName) ?></div>
+            <div class="head grand"><?= c($action->name) ?></div>
             <div class="subhead"><?= count($action->services) ?></div>      
         </div>          
     </div>
@@ -29,7 +29,7 @@ $acts = [
         'content'=>$this->render('//services/queryResults/_actionResults.php', ['action'=>$action])
     ];
 $acts_i = [
-        'label'=>'<i class="fa fa-tag"></i> ' . $action->tName . ' info',
+        'label'=>'<i class="fa fa-tag"></i> ' . $action->name . ' info',
         'content'=> 'Vrste/modeli predmeta:',
     ];
 $items_act = [ $acts, $acts_i ];

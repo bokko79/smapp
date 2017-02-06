@@ -23,10 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             'id',
-            'service_id',
-            'service.tName',
+            'service.name',
             'object_property_id',
-            'objectProperty.property.tName',
+            'objectProperty.property.name',
             'objectProperty.property_type',
             'input_type',
             'value_default',

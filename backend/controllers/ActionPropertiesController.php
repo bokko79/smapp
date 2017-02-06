@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 /**
  * ActionPropertiesController implements the CRUD actions for CcActionProperties model.
@@ -63,8 +64,15 @@ class ActionPropertiesController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $action = $model->action;
+        $query = \common\models\CcActionPropertyValues::find()->where(['action_property_id' => $id]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'propertyValues' => new ActiveDataProvider([
+                'query' => $query,
+            ]),
         ]);
     }
 

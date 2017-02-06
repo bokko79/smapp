@@ -14,8 +14,8 @@ use kartik\tabs\TabsX;
             <?= Html::img('@web/images/cards/info/info_docs'.rand(0, 9).'.jpg', ['style'=>'']) ?>
         </div>
         <div class="title">
-            <div class="head grand"><?= c($object->tName) ?> <?= ($object->parent) ? '<span class="head major thin">['.c($object->parent->tName).']</span>' : null ?></div>
-            <div class="subhead"><?= c($object->oType->tName) ?></div>
+            <div class="head grand"><?= c($object->name) ?> <?= ($object->parent) ? '<span class="head major thin">['.c($object->parent->name).']</span>' : null ?></div>
+            <div class="subhead"><?= c($object->oType->name) ?></div>
         </div>          
     </div>
     <div class="secondary-context avatar-padded cont col-md-6">
@@ -28,7 +28,7 @@ use kartik\tabs\TabsX;
             'content'=>$this->render('//services/queryResults/_objectResults.php', ['object'=>$object])
         ];
     $objs_info = [
-            'label'=>'<i class="fa fa-tag"></i> '.$object->tName.' info',
+            'label'=>'<i class="fa fa-tag"></i> '.$object->name.' info',
             'content'=> 'Vrste izdavanja:',
         ];
     $objs_properties = [

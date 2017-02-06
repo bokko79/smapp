@@ -28,7 +28,7 @@ class CcServiceObjectPropertyValues extends \yii\db\ActiveRecord
     {
         return [
             [['service_object_property_id', 'object_property_value_id'], 'required'],
-            [['service_object_property_id', 'object_property_value_id'], 'integer'],
+            [['service_object_property_id', 'object_property_value_id', 'selected_value'], 'integer'],
         ];
     }
 
@@ -41,6 +41,7 @@ class CcServiceObjectPropertyValues extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'service_object_property_id' => Yii::t('app', 'Service Object Property ID'),
             'object_property_value_id' => Yii::t('app', 'Object Property Model ID'),
+            'selected_value' => Yii::t('app', 'Selected Value'),
         ];
     }
 
@@ -58,5 +59,13 @@ class CcServiceObjectPropertyValues extends \yii\db\ActiveRecord
     public function getObjectPropertyValue()
     {
         return $this->hasOne(CcObjectPropertyValues::className(), ['id' => 'object_property_value_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getService()
+    {
+        return $this->serviceObjectProperty->service;
     }
 }

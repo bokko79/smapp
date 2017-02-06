@@ -33,10 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'type',
         [
-            'attribute' => 'multiple_values',
+            'attribute' => 'specific_values',
             'format' => 'raw',
             'value'=>function ($data) {
-                return $data->multiple_values==1 ? 'Yes' : 'No';
+                return $data->specific_values==1 ? 'Yes' : 'No';
             },
         ], 
 

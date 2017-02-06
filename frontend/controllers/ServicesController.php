@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use common\models\Log;
 
 /**
  * ServicesController implements the CRUD actions for CcServices model.
@@ -17,6 +18,22 @@ use yii\web\UploadedFile;
 class ServicesController extends Controller
 {
     //public $layout = '/admin';
+
+    /**
+     * Event is triggered after changing users' email address.
+     * Triggered with \dektrium\user\events\UserEvent.
+     */
+    const EVENT_AFTER_VISIT = 'afterVisit';
+
+    // event init
+    public function init()
+    {
+        //$bookmark = new BookmarksController();
+        $this->on(self::EVENT_AFTER_VISIT, [$this, 'afterVisit']);
+        $this->on(BookmarksController::EVENT_SERVICE_BOOKMARKED, [
+            '\frontend\controllers\BookmarksController', 'serviceBookmark']);
+        $this->on(BookmarksController::EVENT_SERVICE_UNBOOKMARKED, ['\frontend\controllers\BookmarksController', 'serviceUnbookmark']);
+    }
     
     /**
      * @inheritdoc
@@ -40,8 +57,19 @@ class ServicesController extends Controller
      */
     public function actionView($id)
     {
+        $this->trigger(self::EVENT_AFTER_VISIT, new yii\base\Event(['sender' => $id]));
+        $model = $this->findModel($id);
+        
+        if(!Yii::$app->user->isGuest and $model->isBookmarked(Yii::$app->user->id)){            
+            $bookmark = \common\models\UserServices::find()->where(['service_id'=>$id, 'user_id'=>Yii::$app->user->id])->one();
+        } else {
+            $bookmark = new \common\models\UserServices;
+        }
+        $this->bookmarkingService($model, $bookmark);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'bookmark' => $bookmark,
         ]);
     }
 
@@ -59,5 +87,28 @@ class ServicesController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public static function bookmarkingService($model, $bookmark)
+    {        
+        if ($bookmark->load(Yii::$app->request->post())) {
+            $bookmark->user_id = Yii::$app->user->id;
+            $bookmark->status = $model->isActiveBookmark(Yii::$app->user->id) ? 0 : 1;
+            if($bookmark->save()){
+                if(!$model->isActiveBookmark(Yii::$app->user->id)){
+                    $this->trigger(BookmarksController::EVENT_SERVICE_BOOKMARKED, new yii\base\Event(['sender' => $model->id]));
+                } else {
+                    $this->trigger(BookmarksController::EVENT_SERVICE_UNBOOKMARKED, new yii\base\Event(['sender' => $model->id]));
+                }                
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+    }
+
+    public function afterVisit($event)
+    {        
+        $log = new Log;
+        $log->subject_id = $event->sender;
+        $log->logEvent(43);
     }
 }

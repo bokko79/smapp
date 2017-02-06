@@ -136,6 +136,22 @@ class UserAccount extends BaseUser
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getBookmarkedServices()
+    {
+        return $this->hasMany(UserServices::className(), ['user_id' => 'id'])->where('status=1');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getActivities()
+    {
+        return $this->hasMany(Log::className(), ['user_id' => 'id'])->orderBy(['id'=>SORT_DESC]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getProfile()
     {
         foreach ($this->profiles as $key => $profile) {
@@ -261,14 +277,9 @@ class UserAccount extends BaseUser
     public function accountType()
     {
         switch ($this->type) {
-            case 1:
-                $accountType = 'permanent';
-                break;            
-            default:
-                $accountType = 'temporary';
-                break;
+            case 1: $accountType = 'permanent'; break;            
+            default: $accountType = 'temporary'; break;
         }
-
         return $accountType;
     }
 
@@ -276,46 +287,24 @@ class UserAccount extends BaseUser
     public function accountStatus()
     {
         switch ($this->status) {
-            case 2:
-                $accountStatus = 'deactivated';
-                break;
-            case 3:
-                $accountStatus = 'hibernated';
-                break;
-            case 4:
-                $accountStatus = 'suspended';
-                break;
-            case 5:
-                $accountStatus = 'banned';
-                break;
-            default:
-                $accountStatus = 'active';
-                break;
+            case 2: $accountStatus = 'deactivated'; break;
+            case 3: $accountStatus = 'hibernated'; break;
+            case 4: $accountStatus = 'suspended'; break;
+            case 5: $accountStatus = 'banned'; break;
+            default: $accountStatus = 'active'; break;
         }
-
         return $accountStatus;
     }
 
     public function accountMembershipType()
     {
         switch ($this->membership_type) {
-            case 1:
-                $accountMembershipType = 'basic';
-                break;
-            case 2:
-                $accountMembershipType = 'silver';
-                break;
-            case 3:
-                $accountMembershipType = 'gold';
-                break;
-            case 4:
-                $accountMembershipType = 'premium';
-                break;            
-            default:
-                $accountMembershipType = 'free';
-                break;
+            case 1: $accountMembershipType = 'basic'; break;
+            case 2: $accountMembershipType = 'silver'; break;
+            case 3: $accountMembershipType = 'gold'; break;
+            case 4: $accountMembershipType = 'premium'; break;            
+            default: $accountMembershipType = 'free'; break;
         }
-
         return $accountMembershipType;
     }
 }

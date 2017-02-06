@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
 
 /**
  * ProvidersController implements the CRUD actions for CcIndustries model.
@@ -64,8 +65,13 @@ class ProvidersController extends Controller
      */
     public function actionView($id)
     {
+        $query = \common\models\CcProviderProperties::find()->where(['provider_id' => $id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'properties' => new ActiveDataProvider([
+                'query' => $query,
+            ]),
         ]);
     }
 

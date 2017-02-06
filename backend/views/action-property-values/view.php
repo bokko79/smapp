@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\CsActionPropertyValues */
@@ -28,8 +29,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'action_property_id',
-            'property_value_id',
-            'selected_value',
+            [
+                'label' => 'Action Property',
+                'format' => 'raw',
+                'value'=> Html::a($model->actionProperty->property->name . ' ' . $model->actionProperty->action->name, Url::to(['/action-properties/view', 'id'=>$model->action_property_id]), []),
+            ],
+            [
+                'label' => 'Property Value',
+                'format' => 'raw',
+                'value'=> $model->property_value_id ? Html::a($model->propertyValue->value, Url::to(['/property-values/view', 'id'=>$model->property_value_id]), []) : null,
+            ],
+            [
+                'label' => 'Object',
+                'format' => 'raw',
+                'value'=> $model->object ? Html::a($model->object->name, Url::to(['/objects/view', 'id'=>$model->object_id]), []) : null,
+            ],           
+            [
+                'label' => 'Selected',
+                'value'=> $model->selected_value==1 ? 'Yes' : 'No',
+            ],
         ],
     ]) ?>

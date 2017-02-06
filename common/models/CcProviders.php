@@ -61,11 +61,11 @@ class CcProviders extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Ime delatnosti.',
-            'category_id' => 'Kategorija uslužne delatnosti.',
-            'file_id' => 'Slika delatnosti.',
+            'name' => 'Ime provajdera',
+            'category_id' => 'Kategorija provajdera',
+            'file_id' => 'Slika provajdera',
             'status' => 'Status',
-            'hit_counter' => 'Broj poseta delatnosti.',
+            'hit_counter' => 'Broj poseta provajdera',
         ];
     }
 

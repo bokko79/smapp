@@ -8,6 +8,8 @@ use kartik\widgets\DatePicker;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use kartik\widgets\FileInput;
+
+//$model->value_class = 'protected';
 ?>
 
 
@@ -21,7 +23,7 @@ use kartik\widgets\FileInput;
 
 
     <?= $form->field($model, 'object_property_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(\common\models\CcObjectProperties::find()->joinWith('object as o')->all(), 'id', 'object.name'),
+            'data' => ArrayHelper::map(\common\models\CcObjectProperties::find()->joinWith('object as o')->joinWith('property as p')->groupBy(['o.id', 'p.id'])->all(), 'id', 'displayName'),
             'options' => ['placeholder' => 'Izaberite...'],
             'language' => 'sr-Latn',
             'changeOnReset' => false,           
@@ -47,7 +49,23 @@ use kartik\widgets\FileInput;
             ],          
         ]) ?>
 
-        <?= $form->field($model, 'value_type')->dropDownList(['value' => 'value', 'model' => 'model', 'part' => 'part', 'other' => 'other'], ['style'=>'width:50%']) ?>
+    <?= $form->field($model, 'file_id')->widget(Select2::classname(), [
+            'data' => ArrayHelper::map(\common\models\Files::find()->all(), 'id', 'name'),
+            'options' => ['placeholder' => 'Izaberite...'],
+            'language' => 'sr-Latn',
+            'changeOnReset' => false, 
+            'pluginOptions' => [
+                'allowClear' => true
+            ],          
+        ]) ?>
+
+        <?= $form->field($model, 'value_type')->dropDownList(['value' => 'value', 'model' => 'model', 'part' => 'part', 'other' => 'other', 'integral_part' => 'integral part', 'file' => 'file'], ['style'=>'width:50%']) ?>
+
+        <?= $form->field($model, 'value_class')->dropDownList([ 'public' => 'Public', 'private' => 'Private', 'protected' => 'Protected', 'disabled' => 'Disabled',], ['prompt' => '',]) ?>
+
+        <?= $form->field($model, 'countable_value')->dropDownList([0 => 'No', 1 => 'Yes - single', 2 => 'Yes - multiple'], ['style'=>'width:50%']) ?>
+
+        <?= $form->field($model, 'default_part_no')->input('number', ['min'=>1, 'style'=>'width:50%']) ?>
 
     <?= $form->field($model, 'selected_value')->checkbox() ?>
 

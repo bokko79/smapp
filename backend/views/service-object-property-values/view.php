@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -27,7 +28,16 @@ $this->params['breadcrumbs'][] = $this->title;
     'model' => $model,
     'attributes' => [
         'id',
-        'service_object_property_id',
-        'object_property_value_id',
+        'serviceObjectProperty.id',
+        [
+            'label' => 'Service Object Property',
+            'format' => 'raw',
+            'value'=> Html::a($model->serviceObjectProperty->id, Url::to(['/service-object-properties/view', 'id'=>$model->serviceObjectProperty->id]), []),
+        ],
+        'serviceObjectProperty.service.name',
+        'serviceObjectProperty.property_type',
+        'serviceObjectProperty.objectProperty.property.name',
+        'serviceObjectProperty.objectProperty.object.name',
+        'objectPropertyValue.object.name',
     ],
 ]) ?>

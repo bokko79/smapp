@@ -19,9 +19,21 @@ use kartik\widgets\FileInput;
     'options' => ['enctype' => 'multipart/form-data'],
 ]); ?>
 
-    <?= $form->field($model, 'service_object_property_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'service_object_property_id')->widget(Select2::classname(), [
+            'data' => ArrayHelper::map(\common\models\CcServiceObjectProperties::find()->joinWith('objectProperty')->all(), 'id', 'objectProperty.displayName'),
+            'options' => ['placeholder' => 'Izaberite...'],
+            'language' => 'sr-Latn',
+            'changeOnReset' => false,           
+        ]) ?>
 
-    <?= $form->field($model, 'object_property_value_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'object_property_value_id')->widget(Select2::classname(), [
+            'data' => ArrayHelper::map($objectPropertyValues, 'id', 'object.name'),
+            'options' => ['placeholder' => 'Izaberite...'],
+            'language' => 'sr-Latn',
+            'changeOnReset' => false,           
+        ]) ?>
+
+    <?= $form->field($model, 'selected_value')->checkbox() ?>
 
     <div class="row" style="margin:20px;">
         <div class="col-md-offset-3">

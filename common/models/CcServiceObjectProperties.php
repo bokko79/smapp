@@ -10,6 +10,9 @@ use Yii;
  * @property string $id
  * @property integer $service_id
  * @property string $object_property_id
+ * @property integer $unit_id
+ * @property integer $unit_imperial_id
+ * @property integer $property_type
  * @property integer $input_type
  * @property string $value_default
  * @property integer $value_min
@@ -39,10 +42,12 @@ class CcServiceObjectProperties extends \yii\db\ActiveRecord
     {
         return [
             [['service_id', 'object_property_id'], 'required'],
-            [['service_id', 'object_property_id', 'input_type', 'value_min', 'value_max', 'display_order', 'multiple_values', 'specific_values', 'read_only', 'required'], 'integer'],
+            [['service_id', 'object_property_id', 'unit_id', 'unit_imperial_id', 'input_type', 'value_min', 'value_max', 'display_order', 'multiple_values', 'specific_values', 'read_only', 'required'], 'integer'],
             [['step'], 'number'],
+            [['property_type'], 'string'],
             [['value_default'], 'string', 'max' => 128],
             [['pattern'], 'string', 'max' => 32],
+            [['unit_id', 'unit_imperial_id', 'input_type', 'value_min', 'value_max', 'value_default', 'step', 'pattern'], 'default', /*'skipOnEmpty' => true,*/ 'value' => null, /*'on' => 'insert'*/],
         ];
     }
 
@@ -55,6 +60,9 @@ class CcServiceObjectProperties extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'service_id' => Yii::t('app', 'Service ID'),
             'object_property_id' => Yii::t('app', 'Object Property ID'),
+            'unit_id' => Yii::t('app', 'Unit ID'),
+            'unit_imperial_id' => Yii::t('app', 'Unit Imperial ID'),
+            'property_type' => Yii::t('app', 'Type'),
             'input_type' => Yii::t('app', 'Input Type'),
             'value_default' => Yii::t('app', 'Value Default'),
             'value_min' => Yii::t('app', 'Value Min'),
@@ -91,5 +99,21 @@ class CcServiceObjectProperties extends \yii\db\ActiveRecord
     public function getServiceObjectPropertyValues()
     {
         return $this->hasMany(CcServiceObjectPropertyValues::className(), ['service_object_property_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUnit()
+    {
+        return $this->hasOne(CCUnits::className(), ['id' => 'unit_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUnitImperial()
+    {
+        return $this->hasOne(CCUnits::className(), ['id' => 'unit_imperial_id']);
     }
 }

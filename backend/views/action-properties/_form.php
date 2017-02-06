@@ -19,11 +19,39 @@ use kartik\widgets\FileInput;
     'options' => ['enctype' => 'multipart/form-data'],
 ]); ?>
 
-    <?= $form->field($model, 'action_id')->textInput() ?>
+    <?= $form->field($model, 'action_id')->widget(Select2::classname(), [
+            'data' => ArrayHelper::map(\common\models\CcActions::find()->all(), 'id', 'name'),
+            'options' => ['placeholder' => 'Izaberite...'],
+            'language' => 'sr-Latn',
+            'changeOnReset' => false,           
+        ]) ?>
 
-    <?= $form->field($model, 'property_id')->textInput() ?>
+    <?= $form->field($model, 'property_id')->widget(Select2::classname(), [
+            'data' => ArrayHelper::map(\common\models\CcProperties::find()->all(), 'id', 'name'),
+            'options' => ['placeholder' => 'Izaberite...'],
+            'language' => 'sr-Latn',
+            'changeOnReset' => false,           
+        ]) ?>
 
-    <?= $form->field($model, 'required')->textInput() ?>
+    <?= $form->field($model, 'value_default')->input('text') ?>
+
+    <?= $form->field($model, 'value_min')->input('number') ?>
+
+    <?= $form->field($model, 'value_max')->input('number') ?>
+
+    <?= $form->field($model, 'step')->input('number', ['step'=>0.01]) ?>
+
+    <?= $form->field($model, 'pattern')->input('text') ?>
+
+    <?= $form->field($model, 'display_order')->input('number', ['min'=>1, 'value'=>1]) ?>
+
+    <?= $form->field($model, 'multiple_values')->checkbox()->label() ?>
+
+    <?= $form->field($model, 'specific_values')->checkbox()->label() ?>
+
+    <?= $form->field($model, 'read_only')->checkbox()->label() ?>
+
+    <?= $form->field($model, 'required')->checkbox()->label() ?>
 
     <div class="row" style="margin:20px;">
         <div class="col-md-offset-3">

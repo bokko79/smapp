@@ -18,7 +18,7 @@ class CcActionPropertyValuesSearch extends CcActionPropertyValues
     public function rules()
     {
         return [
-            [['id', 'action_property_id', 'property_value_id', 'selected_value'], 'integer'],
+            [['id', 'action_property_id', 'property_value_id', 'selected_value', 'object_id'], 'integer'],
         ];
     }
 

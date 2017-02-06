@@ -28,6 +28,10 @@ use Yii;
  */
 class CcObjectProperties extends \yii\db\ActiveRecord
 {
+    public $inheritance;
+
+    public $primary_object;
+
     /**
      * @inheritdoc
      */
@@ -165,5 +169,120 @@ class CcObjectProperties extends \yii\db\ActiveRecord
     public function getName()
     {
         return $this->property->tName . '  ' . (($this->object) ? $this->object->tNameGen : null);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDisplayName()
+    {
+        return $this->property->name . '  ' . (($this->object) ? $this->object->name : null);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAllValues()
+    { 
+        $values     = [];
+        $check      = [];
+        $checkFile  = [];
+        $checkValue = [];
+
+        // object
+        $object     = $this->object;
+
+        // values of object's property
+        /*if($objectPropertyValues = $this->objectPropertyValues){
+            foreach($objectPropertyValues as $objectPropertyValue){
+                if($objectPropertyValue->value_class=='disabled'){
+                    $check[] = $objectPropertyValue->object_id;
+                } else {
+                    if(!in_array($objectPropertyValue, $values) and !in_array($objectPropertyValue->object_id, $check)){
+                        $values[] = $objectPropertyValue; 
+                        $check[] = $objectPropertyValue->object_id;
+                    }
+                }
+            }
+        }*/
+
+        // public and protected values of inherited properties
+        if($objectProperties = $object->getAllProperties()){ // all object properties
+            foreach($objectProperties as $objectProperty){
+                if($objectProperty->property_id==$this->property_id and $objectPropertyValues = $objectProperty->objectPropertyValues){
+                    foreach($objectPropertyValues as $objectPropertyValue){
+                        if($objectProperty->inheritance=='own'){ // own property                    
+                            if($objectPropertyValue->value_class!='disabled'){
+                                if(!in_array($objectPropertyValue, $values) and (!in_array($objectPropertyValue->property_value_id, $checkValue) or !in_array($objectPropertyValue->object_id, $check) or !in_array($objectPropertyValue->file_id, $checkFile))){
+                                    $values[] = $objectPropertyValue;
+                                }   
+                            }
+                        } else { // inherited property
+                            if(!in_array($objectPropertyValue, $values) and ($objectPropertyValue->value_class=='protected' or $objectPropertyValue->value_class=='public') and (!in_array($objectPropertyValue->property_value_id, $checkValue) or !in_array($objectPropertyValue->object_id, $check) or !in_array($objectPropertyValue->file_id, $checkFile))){
+                                $values[] = $objectPropertyValue;
+                            }
+                        }
+                        $checkFile[]    = ($objectPropertyValue->value_type=='file') ? $objectPropertyValue->file_id : null;
+                        $checkValue[]   = ($objectPropertyValue->value_type=='value') ? $objectPropertyValue->property_value_id : null;
+                        $check[]        = ($objectPropertyValue->value_type=='part' or $objectPropertyValue->value_type=='model' or $objectPropertyValue->value_type=='integral_part' or $objectPropertyValue->value_type=='other') ? $objectPropertyValue->object_id : null;                                                                                         
+                    }                                                         
+                }
+            }
+        }
+
+        // public and protected values of molds
+        /*if($molds = $object->molds){
+            foreach (array_reverse($molds) as $key => $mold) {
+                if($objectPropertiesmm = $mold->objectProperties){
+                    foreach($objectPropertiesmm as $objectPropertymm){
+                        if($objectPropertymm->property_id==$this->property_id and $objectPropertyValuesmm = $objectPropertymm->objectPropertyValues){
+                            foreach($objectPropertyValuesmm as $objectPropertyValuemm){
+                                if(!in_array($objectPropertyValuemm, $values) and ($objectPropertyValuemm->value_class=='protected' or $objectPropertyValuemm->value_class=='public') and !in_array($objectPropertyValuemm->object_id, $check)){
+                                    $values[] = $objectPropertyValuemm;
+                                    $check[] = $objectPropertyValuemm->object_id;
+                                }                                   
+                            }                                
+                        }
+                    }
+                }                    
+            }
+        }*/
+
+        return $values;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAllPropertyValues($object)
+    { 
+        $values = [];
+        $check = [];
+
+        // values of object property
+        if($objectPropertyValues = $this->objectPropertyValues){
+            foreach($objectPropertyValues as $objectPropertyValue){
+                if(!in_array($objectPropertyValue, $values) and $objectPropertyValue->value_class!='disabled'){
+                    $values[] = $objectPropertyValue; 
+                    $check[] = $objectPropertyValue->object_id;                   
+                }                
+            }
+        }
+
+        // public and protected values of inherited properties
+        if($inheritedProperties = $object->getProperties()){
+            foreach($inheritedProperties as $inheritedProperty){
+                if($inheritedProperty->property_id==$this->property_id and $inheritedProperty->inheritance=='inherited' and $objectPropertyValuesmm = $inheritedProperty->objectPropertyValues){
+                    foreach($objectPropertyValuesmm as $objectPropertyValuemm){
+                        if(!in_array($objectPropertyValuemm, $values) and ($objectPropertyValuemm->value_class=='protected' or $objectPropertyValuemm->value_class=='public') and !in_array($objectPropertyValuemm->object_id, $check)){
+                            $values[] = $objectPropertyValuemm;
+                            $check[] = $objectPropertyValuemm->object_id;
+                        }                                   
+                    }                                
+                }
+                //break;
+            }
+        }
+        return $values;
     }
 }
