@@ -194,7 +194,7 @@ class CcProperties extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function formType($object_ownership='provider')
+    public function inputType($object_ownership='provider')
     {
         switch ($this->type) {
             case 1:
@@ -287,7 +287,7 @@ class CcProperties extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function formTypePresentation($object_ownership='provider')
+    public function inputTypePresentation($object_ownership='provider')
     {
         switch ($this->type) {
             case 1:

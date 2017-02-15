@@ -12,8 +12,8 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
-        'css/style_box.css',
+        'css/style.css',
+        'css/style_box1.css',
     ];
     public $js = [
         'js/jquery.geocomplete.js',

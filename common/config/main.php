@@ -16,7 +16,7 @@ return [
         'view' => [
             'theme' => [
                 'pathMap' => [
-                    '@dektrium/user/views' => '@frontend/views/registration',
+                    '@dektrium/user/views' => '@frontend/views/user',
                 ],
             ],
         ],

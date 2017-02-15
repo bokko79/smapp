@@ -43,8 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php if ($module->enableGeneratingPassword == false): ?>
                     <?= $form->field($model, 'password')->passwordInput() ?>
                 <?php endif ?>
-121212
-
 
                 <?= $form->field($model, 'location') ?>      
         <div id="my_map_register" class="col-md-91" style="height:360px; margin-bottom:20px;"></div>

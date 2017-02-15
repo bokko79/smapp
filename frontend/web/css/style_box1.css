@@ -1,6 +1,7 @@
 /* containers */
-html{
+html, body {
 	font-family: 'Montserrat' !important;
+	font-size: 13px;
 }
 .list-container {border-bottom: 1px solid #ddd;}
 .card_container, #card_container {margin:0 0 26px 0; padding:0; border-radius: 2px; box-shadow: 0px 2px 4px #999; background: #fff; float: left; /*position: relative;*/}

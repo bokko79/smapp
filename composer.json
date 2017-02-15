@@ -15,7 +15,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "~2.0.6",
+        "yiisoft/yii2": "~2.0.4",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "dektrium/yii2-user": "0.9.*@dev",
@@ -25,7 +25,12 @@
         "kartik-v/yii2-tree-manager": "@dev",
         "kartik-v/yii2-tabs-x": "@dev",
         "miloschuman/yii2-highcharts-widget": "*",
-        "yiisoft/yii2-elasticsearch": "^2.0"
+        "yiisoft/yii2-elasticsearch": "^2.0",
+        "kartik-v/yii2-widget-activeform": "@dev",
+        "kartik-v/yii2-builder": "@dev",
+        "2amigos/yii2-tinymce-widget": "~1.1",
+        "kartik-v/yii2-slider": "dev-master",
+        "kartik-v/yii2-datecontrol": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -1,15 +1,12 @@
 <?php
-
 /* @var $this \yii\web\View */
 /* @var $content string */
-
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -20,8 +17,11 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCKwIZE-aiLFaqHRxnhI5w5fR-60dl1GMI&amp;libraries=places&amp;language=hr"></script>
+    <?php $this->head() ?>
+    
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -32,7 +32,7 @@ AppAsset::register($this);
         'brandLabel' => 'Servicemapp',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-default navbar-fixed-top',
         ],
     ]);
     $menuItems = [
@@ -44,7 +44,7 @@ AppAsset::register($this);
         ['label' => 'Log', 'url' => ['/site/log']],
         ['label' => 'About', 'url' => ['/site/about']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
-        ['label' => 'Dashboard', 'url' => ['/dashboard/home?username='.Yii::$app->user->identity->username]],
+        //['label' => 'Dashboard', 'url' => ['/dashboard/home?username='.Yii::$app->user->identity->username]],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/user/registration/register']];
