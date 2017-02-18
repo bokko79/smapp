@@ -76,6 +76,8 @@ use kartik\checkbox\CheckboxX;
                 21 => 'buy',
             ], ['prompt' => '']) ?>
 
+    <?= $form->field($model, 'industry_class')->dropDownList([ 'public' => 'Public', 'private' => 'Private', 'protected' => 'Protected', ], ['prompt' => '']) ?>
+
     <?= $form->field($model, 'object_class')->dropDownList([ 'object' => 'Object', 'products' => 'Products', 'models' => 'Models', 'part' => 'Part', ], ['prompt' => '']) ?>
 
     <?= $form->field($model, 'object_ownership')->dropDownList([ 

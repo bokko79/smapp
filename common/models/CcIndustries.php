@@ -121,9 +121,17 @@ class CcIndustries extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
+    public function getParent()
     {
         return $this->hasOne(CcIndustries::className(), ['id' => 'category_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChildren()
+    {
+        return $this->hasMany(CcIndustries::className(), ['category_id' => 'id']);
     }
 
     /**
@@ -156,6 +164,279 @@ class CcIndustries extends \yii\db\ActiveRecord
     public function getIndustryProviders()
     {
         return $this->hasMany(CcIndustryProviders::className(), ['industry_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPath($industry)
+    {
+        $path = [];
+        switch($industry->type){
+            case 'sector': $level=1; break;
+            case 'category': $level=2; break;
+            case 'industry': $level=3; break;
+            case 'field': $level=4; break;
+        }
+        $parent = $industry->parent;
+        
+        if ($level>1)
+        {            
+            $path[$level-1] = $parent;     
+            $path = array_merge($this->getpath($parent), $path);
+        }
+
+        return $path;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategories()
+    {
+        $categories = [];
+        if($this->type=='sector' and $children = $this->children){
+            foreach($children as $child){
+                if($child->type=='category'){
+                    $categories[] = $child;
+                }                
+            }            
+        }
+        return $categories;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIndustries()
+    {
+        $industries = [];
+        if($this->type=='category' and $children = $this->children){
+            foreach($children as $child){
+                if($child->type=='industry'){
+                    $industries[] = $child;
+                }                
+            }            
+        }
+        return $industries;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFields()
+    {
+        $fields = [];
+        if($this->type=='industry' and $children = $this->children){
+            foreach($children as $child){
+                if($child->type=='field'){
+                    $fields[] = $child;
+                }                
+            }            
+        }
+        return $fields;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProviders()
+    {
+        $providers = [];
+        $check = [];
+        if($indProviders = $this->industryProviders){
+            foreach($indProviders as $indProvider){
+                if($indProvider->class!='private' and !in_array($indProvider->provider_id,$check)){
+                    $providers[] = $indProvider->provider;
+                    $check[] = $indProvider->provider_id;
+                }
+            }
+        }
+        if($this->type!='field'){
+            if($this->type=='industry'){
+                if($fields = $this->fields){
+                    foreach($fields as $field){
+                        if($fieldProviders = $field->industryProviders){
+                            foreach($fieldProviders as $fieldProvider){
+                                if($fieldProvider->class!='private' and !in_array($fieldProvider->provider_id,$check)){
+                                    $providers[] = $fieldProvider->provider;
+                                    $check[] = $fieldProvider->provider_id;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if($this->type=='category'){
+                if($industries = $this->industries){
+                    foreach($industries as $industry){
+                        if($industryProviders = $industry->industryProviders){
+                            foreach($industryProviders as $industryProvider){
+                                if($industryProvider->class!='private' and !in_array($industryProvider->provider_id,$check)){
+                                    $providers[] = $industryProvider->provider;
+                                    $check[] = $industryProvider->provider_id;
+                                }
+                            }
+                        }
+                        if($fields = $industry->fields){
+                            foreach($fields as $field){
+                                if($fieldProviders = $field->industryProviders){
+                                    foreach($fieldProviders as $fieldProvider){
+                                        if($fieldProvider->class!='private' and !in_array($fieldProvider->provider_id,$check)){
+                                            $providers[] = $fieldProvider->provider;
+                                            $check[] = $fieldProvider->provider_id;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if($this->type=='sector'){
+                if($categories = $this->categories){
+                    foreach($categories as $category){
+                        if($categoryProviders = $category->industryProviders){
+                            foreach($categoryProviders as $categoryProvider){
+                                if($categoryProvider->class!='private' and !in_array($categoryProvider->provider_id,$check)){
+                                    $providers[] = $categoryProvider->provider;
+                                    $check[] = $categoryProvider->provider_id;
+                                }
+                            }
+                        }
+                        // industries
+                        if($industries = $category->industries){
+                            foreach($industries as $industry){
+                                if($industryProviders = $industry->industryProviders){
+                                    foreach($industryProviders as $industryProvider){
+                                        if($industryProvider->class!='private' and !in_array($industryProvider->provider_id,$check)){
+                                            $providers[] = $industryProvider->provider;
+                                            $check[] = $industryProvider->provider_id;
+                                        }
+                                    }
+                                }
+                                if($fields = $industry->fields){
+                                    foreach($fields as $field){
+                                        if($fieldProviders = $field->industryProviders){
+                                            foreach($fieldProviders as $fieldProvider){
+                                                if($fieldProvider->class!='private' and !in_array($fieldProvider->provider_id,$check)){
+                                                    $providers[] = $fieldProvider->provider;
+                                                    $check[] = $fieldProvider->provider_id;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $providers;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAllServices()
+    {
+        $services = [];
+        $check = [];
+        if($indServices = $this->services){
+            foreach($indServices as $indService){
+                if(!in_array($indService->id,$check)){
+                    $services[] = $indService;
+                    $check[] = $indService->id;
+                }
+            }
+        }
+        if($this->type!='field'){
+            if($this->type=='industry'){
+                if($fields = $this->fields){
+                    foreach($fields as $field){
+                        if($fieldServices = $field->services){
+                            foreach($fieldServices as $fieldService){
+                                if($fieldService->industry_class!='private' and !in_array($fieldService->id,$check)){
+                                    $services[] = $fieldService;
+                                    $check[] = $fieldService->id;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if($this->type=='category'){
+                if($industries = $this->industries){
+                    foreach($industries as $industry){
+                        if($industryServices = $industry->services){
+                            foreach($industryServices as $industryService){
+                                if($industryService->industry_class!='private' and !in_array($industryService->id,$check)){
+                                    $services[] = $industryService;
+                                    $check[] = $industryService->id;
+                                }
+                            }
+                        }
+                        if($fields = $industry->fields){
+                            foreach($fields as $field){
+                                if($fieldServices = $field->services){
+                                    foreach($fieldServices as $fieldService){
+                                        if($fieldService->industry_class!='private' and !in_array($fieldService->id,$check)){
+                                            $services[] = $fieldService;
+                                            $check[] = $fieldService->id;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if($this->type=='sector'){
+                if($categories = $this->categories){
+                    foreach($categories as $category){
+                        if($categoryServices = $category->services){
+                            foreach($categoryServices as $categoryService){
+                                if($categoryService->industry_class!='private' and !in_array($categoryService->id,$check)){
+                                    $services[] = $categoryService;
+                                    $check[] = $categoryService->id;
+                                }
+                            }
+                        }
+                        // industries
+                        if($industries = $category->industries){
+                            foreach($industries as $industry){
+                                if($industryServices = $industry->services){
+                                    foreach($industryServices as $industryService){
+                                        if($industryService->industry_class!='private' and !in_array($industryService->id,$check)){
+                                            $services[] = $industryService;
+                                            $check[] = $industryService->id;
+                                        }
+                                    }
+                                }
+                                if($fields = $industry->fields){
+                                    foreach($fields as $field){
+                                        if($fieldServices = $field->services){
+                                            foreach($fieldServices as $fieldService){
+                                                if($fieldService->industry_class!='private' and !in_array($fieldService->id,$check)){
+                                                    $services[] = $fieldService;
+                                                    $check[] = $fieldService->id;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $services;
     }
 
     /**

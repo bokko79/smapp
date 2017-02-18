@@ -16,6 +16,7 @@ use yii\imagine\Image;
  * @property string $file_id
  * @property string $name
  * @property integer $service_type
+ * @property string $industry_class
  * @property string $object_class
  * @property string $object_ownership
  * @property integer $file
@@ -83,7 +84,7 @@ class CcServices extends \yii\db\ActiveRecord
         return [
             [['industry_id', 'action_id', 'object_id', 'unit_id', 'name', 'service_type'], 'required'],
             [['industry_id', 'action_id', 'object_id', 'unit_id', 'file_id', 'service_type', 'file', 'amount', 'consumer', 'consumer_children', 'location', 'coverage', 'shipping', 'geospecific', 'time', 'duration', 'frequency', 'availability', 'installation', 'tools', 'turn_key', 'support', 'ordering', 'pricing', 'terms', 'labour_type', 'process', 'hit_counter'], 'integer'],
-            [['object_class', 'object_ownership', 'dat', 'status'], 'string'],
+            [['object_class', 'industry_class', 'object_ownership', 'dat', 'status'], 'string'],
             [['name'], 'string', 'max' => 90],
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif'],
             
@@ -104,6 +105,7 @@ class CcServices extends \yii\db\ActiveRecord
             'file_id' => Yii::t('app', 'File ID'),
             'name' => Yii::t('app', 'Name'),
             'service_type' => Yii::t('app', 'Service Type'),
+            'industry_class' => Yii::t('app', 'Industry Class'),
             'object_class' => Yii::t('app', 'Object Class'),
             'object_ownership' => Yii::t('app', 'Object Ownership'),
             'file' => Yii::t('app', 'File'),

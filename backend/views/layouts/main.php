@@ -20,7 +20,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <?php $this->head() ?>
 </head>
@@ -48,6 +48,9 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Actions', 'url' => ['/actions/index']];
         $menuItems[] = ['label' => 'Services', 'url' => ['/services/index']];
         $menuItems[] = ['label' => 'Properties', 'url' => ['/properties/index']];
+        $menuItems[] = ['label' => 'Property Values', 'url' => ['/property-values/index']];
+        $menuItems[] = ['label' => 'Processes', 'url' => ['/processes/index']];
+        $menuItems[] = ['label' => 'Posts', 'url' => ['/posts/index']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
             'url' => ['/user/security/logout'],

@@ -22,7 +22,7 @@ class CcServicesSearch extends CcServices
     {
         return [
             [['id', 'industry_id', 'action_id', 'object_id', 'unit_id', 'file_id', 'service_type', 'file', 'amount', 'consumer', 'consumer_children', 'location', 'coverage', 'shipping', 'geospecific', 'time', 'duration', 'frequency', 'availability', 'installation', 'tools', 'turn_key', 'support', 'ordering', 'pricing', 'terms', 'labour_type', 'process', 'hit_counter'], 'integer'],
-            [['name', 'object_class', 'object_ownership', 'dat', 'status'], 'safe'],
+            [['name', 'industry_class', 'object_class', 'object_ownership', 'dat', 'status'], 'safe'],
         ];
     }
 

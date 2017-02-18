@@ -125,7 +125,18 @@ class CcProviders extends \yii\db\ActiveRecord
      */
     public function getServices()
     {
-        //return $this->hasMany(CcServices::className(), ['provider_id' => 'id']);
+        $services = [];
+
+        if($industryProviders = $this->industryProviders){
+            foreach($industryProviders as $industryProvider){
+                if($industryServices = $industryProvider->industry->allServices){
+                    foreach($industryServices as $industryService){
+                        $services[] = $industryService;
+                    }
+                }
+            }
+        }
+        return $services;
     }
 
     /**
@@ -141,7 +152,7 @@ class CcProviders extends \yii\db\ActiveRecord
      */
     public function getProviderServices()
     {
-        return $this->hasMany(ProviderServices::className(), ['provider_id' => 'id']);
+        return $this->hasMany(CcProviderServices::className(), ['provider_id' => 'id']);
     }
 
     /**

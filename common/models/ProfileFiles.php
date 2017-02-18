@@ -24,7 +24,7 @@ use yii\db\ActiveRecord;
  *
  * @author Dmitry Erofeev <dmeroff@gmail.com
  */
-class ProfileContact extends ActiveRecord
+class ProfileFiles extends ActiveRecord
 {
     use ModuleTrait;
     /** @var \dektrium\user\Module */
@@ -53,6 +53,7 @@ class ProfileContact extends ActiveRecord
             [['profile_id', 'file_id'], 'required'],
             [['profile_id', 'file_id'], 'integer'],
             [['name'], 'string', 'max' => 128],
+        ];
     }
 
     /**

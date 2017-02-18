@@ -30,12 +30,13 @@ return [
                 'registration'  => 'frontend\controllers\RegistrationController',
                 'security'      => 'frontend\controllers\SecurityController',
                 'settings'      => 'frontend\controllers\SettingsController',
+                'profile'      => 'frontend\controllers\ProfileController',
             ],
             // overriding models dektrium
             'modelMap' => [
                 'Profile'           => 'common\models\Profile',
-                'ProfileContact'    => 'common\models\ProfileContact',
-                'ProfileFiles'      => 'common\models\ProfileFiles',
+                //'ProfileContact'    => 'common\models\ProfileContact',
+                //'ProfileFiles'      => 'common\models\ProfileFiles',
                 'RegistrationForm'  => 'common\models\RegistrationForm',
                 'SettingsForm'      => 'common\models\SettingsForm',
                 'UserAccount'       => 'common\models\User',

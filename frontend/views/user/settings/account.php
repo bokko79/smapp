@@ -10,8 +10,10 @@
  */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use yii\bootstrap\Modal;
 
 /**
  * @var $this  yii\web\View
@@ -31,6 +33,7 @@ $currencies = ArrayHelper::map(\common\models\CcCurrencies::find()->all(), 'id',
 <div class="row">
     <div class="col-md-3">
         <?= $this->render('_menu') ?>
+        <?= Html::a('Create new profile', Url::to(), ['class'=>'btn btn-warning', 'data-toggle'=>'modal', 'data-backdrop'=>false,  'data-target'=>'#choose-profile-type']) ?>
     </div>
     <div class="col-md-9">
         <div class="panel panel-default">
@@ -125,3 +128,15 @@ $currencies = ArrayHelper::map(\common\models\CcCurrencies::find()->all(), 'id',
         <?php endif ?>
     </div>
 </div>
+
+<?php Modal::begin([
+        'id'=>'choose-profile-type',
+        'size'=>Modal::SIZE_SMALL,
+        'class'=>'overlay_modal',
+        'header'=> 'choose-profile-type',
+    ]); ?>
+        <?= Html::a('Individual profile', Url::to(['profile/create', 'type'=>'occupation']), ['class'=>'btn btn-link']) ?>
+        <br>
+        <?= Html::a('Company profile', Url::to(['profile/create', 'type'=>'enterprise']), ['class'=>'btn btn-link']) ?>
+<?php Modal::end();
+?>

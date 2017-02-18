@@ -87,7 +87,8 @@ class PostsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $user = \common\models\UserAccount::find()->where('id='.Yii::$app->user->id)->one();
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

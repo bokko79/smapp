@@ -68,11 +68,17 @@ class IndustriesController extends Controller
     {
         $model = $this->findModel($id);
         $query = \common\models\CcObjectProperties::find()->where(['object_id' => $id]);
+        $allServices = \common\models\CcServices::find()->where(['id'=>0]);
+        if($model->allServices){
+            foreach($model->allServices as $allService){
+                $allServices->orWhere(['id' => $allService->id]);
+            }
+        }
 
         return $this->render('view', [
             'model' => $model,
             'services' => new ActiveDataProvider([
-                'query' => \common\models\CcServices::find()->where(['industry_id' => $model->id]),
+                'query' => $allServices,
             ]),
         ]);
     }

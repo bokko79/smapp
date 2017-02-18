@@ -66,7 +66,7 @@ class SettingsController extends BaseSettingsController
                 //'only' => ['services'],
                 'rules' => [
                     [
-                        'actions' => ['objects', 'object-setup', 'account'],
+                        'actions' => ['objects', 'object-setup', 'account', 'profile', 'networks'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

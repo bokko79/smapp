@@ -51,7 +51,7 @@ use kartik\widgets\FileInput;
         echo '<label class="control-label col-md-3" for="">Slika delatnosti</label>';
         echo '<div class="col-sm-9 margin-bottom-20">';
 
-                $image = Html::img('/images/industries/'.$model->file->ime);
+                $image = Html::img('/images/industries/'.$model->file->name);
                 echo Html::a($image, Url::to(), [
                     'class' => 'margin-bottom-10 margin-right-10',
                     //'data-toggle'=>'modal', 'data-backdrop'=>false,  'data-target'=>'#file-delete'.$model->id

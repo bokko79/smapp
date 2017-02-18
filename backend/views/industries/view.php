@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'attributes' => [
         'id',
         'name',
-        'category.name',
+        'parent.name',
         'nameGen',
         'nameDat',
         'nameAkk',

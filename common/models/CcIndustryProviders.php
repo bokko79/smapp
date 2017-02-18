@@ -41,6 +41,7 @@ class CcIndustryProviders extends \yii\db\ActiveRecord
         return [
             [['industry_id', 'provider_id'], 'required'],
             [['industry_id', 'provider_id', 'type'], 'integer'],
+            [['class'], 'string'],
         ];
     }
 
@@ -54,6 +55,7 @@ class CcIndustryProviders extends \yii\db\ActiveRecord
             'industry_id' => Yii::t('app', 'Industry'),
             'provider_id' => Yii::t('app', 'Provider'),
             'type' => Yii::t('app', 'Type'),
+            'class' => Yii::t('app', 'Class'),
         ];
     }
 

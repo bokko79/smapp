@@ -18,7 +18,7 @@ class CcIndustryProvidersSearch extends CcIndustryProviders
     public function rules()
     {
         return [
-            [['id', 'industry_id', 'provider_id', 'type'], 'integer'],
+            [['id', 'industry_id', 'provider_id', 'type', 'class'], 'integer'],
         ];
     }
 
