@@ -24,9 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'id',
             'name',
-            'category_id',
+            'category.name',
             'file_id',
-            // 'status',
+            'type',
             // 'hit_counter',
 
             ['class' => 'yii\grid\ActionColumn'],

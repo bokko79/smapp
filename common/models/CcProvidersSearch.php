@@ -18,7 +18,7 @@ class CcProvidersSearch extends CcProviders
     public function rules()
     {
         return [
-            [['id', 'category_id', 'file_id', 'hit_counter'], 'integer'],
+            [['id', 'type', 'file_id'], 'integer'],
             [['name', 'status'], 'safe'],
         ];
     }
@@ -60,9 +60,8 @@ class CcProvidersSearch extends CcProviders
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'category_id' => $this->category_id,
+            'type' => $this->type,
             'file_id' => $this->file_id,
-            'hit_counter' => $this->hit_counter,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

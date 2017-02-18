@@ -51,7 +51,7 @@ use kartik\checkbox\CheckboxX;
     <?= $form->field($model, 'file_id')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
+    
     <?= $form->field($model, 'service_type')->dropDownList([ 
                 1 => 'create', 
                 2 => 'read', 
@@ -192,6 +192,26 @@ use kartik\checkbox\CheckboxX;
     <?= $form->field($model, 'dat')->dropDownList([ 'open' => 'Open', 'closed' => 'Closed', ], ['prompt' => '']) ?>
 
     <?= $form->field($model, 'status')->dropDownList([ 'approved' => 'Approved', 'submitted' => 'Submitted', 'rejected' => 'Rejected', 'to_finish' => 'To finish', 'updated' => 'Updated', ], ['prompt' => '']) ?>
+
+    <hr>
+    <h4>Translations</h4>
+    <?= $form->field($model_trans, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_gen')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_dat')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_akk')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_inst')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_pl')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_pl_gen')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_gender')->dropDownList(['m' => 'muški', 'f' => 'ženski', 'n' => 'srednji'], ['style'=>'width:50%']) ?>
+    <hr>
+    <?= $form->field($model_trans, 'description')->textArea() ?>
+    <?= $form->field($model_trans, 'subtext')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'hint')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'subtitle')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'note')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'additional_note')->textInput(['maxlength' => true]) ?>
+    <hr>  
 
     <div class="row" style="margin:20px;">
         <div class="col-md-offset-3">

@@ -294,54 +294,6 @@ class CcServices extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getT()
-    {
-        return $this;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSimilarServices()
-    {
-        return $this->hasMany(CcSimilarServices::className(), ['service_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSimilarServices0()
-    {
-        return $this->hasMany(CcSimilarServices::className(), ['sim_service_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrderServices()
-    {
-        //return $this->hasMany(OrderServices::className(), ['service_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPresentations()
-    {
-        //return $this->hasMany(Presentations::className(), ['service_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPromotionServices()
-    {
-        //return $this->hasMany(PromotionServices::className(), ['service_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getProviderServices()
     {
         //return $this->hasMany(ProviderServices::className(), ['service_id' => 'id']);
@@ -411,16 +363,16 @@ class CcServices extends \yii\db\ActiveRecord
         return '2.499,99&nbsp;RSD/m<sup>2</sup>';
     }
 
-    /**
+   /**
      * @return \yii\db\ActiveQuery
      */
     public function getTranslation()
     {
-        /*$service_translation = CcServicesTranslation::find()->where('lang_code="SR" and service_id='.$this->id)->one();
-        if($service_translation) {
-            return $service_translation;
+        $action_translation = Translations::find()->where('lang_code="SR" and entity="service" and entity_id='.$this->id)->one();
+        if($action_translation) {
+            return $action_translation;
         }
-        return false;  */      
+        return false;      
     }
 
     /**
@@ -431,40 +383,161 @@ class CcServices extends \yii\db\ActiveRecord
         if($this->getTranslation()) {
             return $this->getTranslation()->name;
         }       
-        return false;   
+        return $this->name;   
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTNameGen()
+    public function getNameGen()
     {
         if($this->getTranslation()) {
             return $this->getTranslation()->name_gen;
         }       
-        return false;   
+        return $this->name;   
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTNameDat()
+    public function getNameDat()
     {
         if($this->getTranslation()) {
             return $this->getTranslation()->name_dat;
         }       
-        return false;   
+        return $this->name;   
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTNameAkk()
+    public function getNameAkk()
     {
         if($this->getTranslation()) {
             return $this->getTranslation()->name_akk;
         }       
-        return false;   
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNameInst()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_inst;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNamePl()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_pl;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNamePlGen()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_pl_gen;
+        }       
+        return $this->name;   
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGender()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_gender;
+        }       
+        return 'n';   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->description;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubtext()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->subtext;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHint()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->hint;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTitle()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->title;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubtitle()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->subtitle;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNote()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->note;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddNote()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->additional_note;
+        }       
+        return $this->name;   
     }
 
     /**
@@ -475,27 +548,7 @@ class CcServices extends \yii\db\ActiveRecord
         return c($this->tName); 
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTNote()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->note;
-        }       
-        return false;   
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTSubnote()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->note;
-        }       
-        return false;   
-    }
+    
 
     /**
      * @return \yii\db\ActiveQuery

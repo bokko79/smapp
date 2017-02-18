@@ -15,5 +15,5 @@ $this->params['breadcrumbs'][] = 'Update';
 
 <?= $this->render('_form', [
     'model' => $model,
-    //'model_trans' => $model_trans,
+    'model_trans' => $model_trans,
 ]) ?>

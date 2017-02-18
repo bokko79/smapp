@@ -9,7 +9,7 @@ use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $model common\models\CsServices */
 
-$this->title = $model->name;
+$this->title = $model->tName;
 $this->params['breadcrumbs'][] = ['label' => 'Cs Services', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'model' => $model,
                 'attributes' => [
                     'id',
-                    'name',
+                    'tName',
                     [
                         'label'=>'Industry',
                         'format'=>'raw',
@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
         <div class="col-lg-8">
-        <?= Html::a('Add new Service object property', ['service-object-properties/create', 'CcServiceObjectProperties[service_id]' => $model->id], ['class' => 'btn btn-default']) ?>
+        <?php Html::a('Add new Service object property', ['service-object-properties/create', 'CcServiceObjectProperties[service_id]' => $model->id], ['class' => 'btn btn-default']) ?>
         <?= GridView::widget([
                     'dataProvider' => $properties,
                     'columns' => [

@@ -4,12 +4,12 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\CcProperties;
-use common\models\CcPropertiesTranslation;
 use common\models\CcPropertiesSearch;
 use common\models\CcPropertyValues;
 use common\models\CcObjectProperties;
 use common\models\CcActionProperties;
 use common\models\CcProviderProperties;
+use common\models\Translations;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -94,19 +94,18 @@ class PropertiesController extends Controller
     public function actionCreate()
     {
         $model = new CcProperties();
-        //$model_trans = new CcPropertiesTranslation();
+        $trans = new Translations();
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/ and $model->save()) {
-            /*$model_trans->property_id = $model->id;
-            $model_trans->lang_code = 'SR';
-            $model_trans->orig_name = $model->name;
-            if($model_trans->save()){*/
-                return $this->redirect(['view', 'id' => $model->id]);
-            /*}    */        
+        if ($model->load(Yii::$app->request->post()) and $model->save() and $trans->load(Yii::$app->request->post())) {
+            $trans->entity = 'property';
+            $trans->entity_id = $model->id;
+            $trans->lang_code = 'SR';
+            $trans->save();
+            return $this->redirect(['view', 'id' => $model->id]);      
         } else {
             return $this->render('create', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }
@@ -120,15 +119,18 @@ class PropertiesController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        //$model_trans = $model->translation;
+        $trans = $model->translation ? $model->translation : new Translations();
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/ and $model->save()/* and $model_trans->save()*/) {
-            
+        if ($model->load(Yii::$app->request->post()) and $model->save() and $trans->load(Yii::$app->request->post())) {
+            $trans->entity = 'property';
+            $trans->entity_id = $model->id;
+            $trans->lang_code = 'SR';
+            $trans->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }

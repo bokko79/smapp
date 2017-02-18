@@ -5,7 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\CcObjects;
 use common\models\CcObjectsSearch;
-use common\models\CcObjectsTranslation;
+use common\models\Translations;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -114,30 +114,29 @@ class ObjectsController extends Controller
     public function actionCreate()
     {
         $model = new CcObjects();
-        //$model_trans = new CcObjectsTranslation();
+        $trans = new Translations();
 
         if($objects = Yii::$app->request->get('CcObjects')){
             $model->object_id = !empty($objects['object_id']) ? $objects['object_id'] : null;
         }
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/) {
+        if ($model->load(Yii::$app->request->post()) and $trans->load(Yii::$app->request->post())) {
             $parent = $this->findModel($model->object_id);
             $model->level = $parent->level + 1;
             if($model->save()){
                 if ($model->imageFile) {
                     $model->upload();
                 }
-                /*$model_trans->object_id = $model->id;
-                $model_trans->orig_name = $model->name;
-                $model_trans->save();*/
-                //if($model_trans->save()){
-                    return $this->redirect(['view', 'id' => $model->id]);
-                //}
+                $trans->entity = 'object';
+                $trans->entity_id = $model->id;
+                $trans->lang_code = 'SR';
+                $trans->save();
+                return $this->redirect(['view', 'id' => $model->id]);  
             }            
         } else {
             return $this->render('create', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }
@@ -151,9 +150,9 @@ class ObjectsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        //$model_trans = $model->translation;
+        $trans = $model->translation ? $model->translation : new Translations();
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/) {
+        if ($model->load(Yii::$app->request->post()) and $trans->load(Yii::$app->request->post())) {
 
             $parent = $this->findModel($model->object_id);
             $model->level = $parent->level + 1;
@@ -165,14 +164,16 @@ class ObjectsController extends Controller
                 $model->file_id = $image->id;
             }
 
-            //$model_trans->save();
-
-            return $this->redirect(['view', 'id' => $model->id]);
+            $trans->entity = 'object';
+            $trans->entity_id = $model->id;
+            $trans->lang_code = 'SR';
+            $trans->save();
+            return $this->redirect(['view', 'id' => $model->id]);  
                 
         } else {
             return $this->render('update', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }

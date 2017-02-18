@@ -32,14 +32,37 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attributes' => [
                     'id',
                     'name',
-                    'category_id',
+                    'type',
                     'file_id',
                     'status',
-                    'hit_counter',
                 ],
             ]) ?>
+            <?= Html::a('New Provider Industry', ['/industry-providers/create', 'CcIndustryProviders[provider_id]' => $model->id], ['class' => 'btn btn-warning btn-sm']) ?>
+            <?= GridView::widget([
+                'dataProvider' => $industries,
+                'columns' => [
+                    'id',
+                    [
+                        'label'=>'Industry',
+                        'format' => 'raw',
+                        'value'=>function ($data) {
+                            return Html::a($data->industry->name, ['industries/view', 'id' => $data->id]);
+                        },
+                    ],
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'template' => '{update}',
+                        'buttons' => [
+                            'update' => function ($url, $model, $key) {
+                                return \Yii::$app->user->can('manageCoreDatabase') ? Html::a('Update', ['/industry-providers/update', 'id' => $model->id], ['class' => '']) : '';
+                            },
+                        ],                        
+                    ],
+                ],
+            ]); ?>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-8">            
+
             <?= Html::a('New Property', ['/provider-properties/create', 'CcProviderProperties[provider_id]' => $model->id], ['class' => 'btn btn-warning btn-sm']) ?>
             <?= GridView::widget([
                 'dataProvider' => $properties,

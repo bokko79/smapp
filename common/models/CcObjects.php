@@ -107,26 +107,9 @@ class CcObjects extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getObjectIssues()
-    {
-        //return $this->hasMany(CcObjectIssues::className(), ['object_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getFile()
     {
         return $this->hasOne(Files::className(), ['id' => 'file_id']);
-    }
-    
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getT()
-    {
-        return $this->hasMany(CcObjectsTranslation::className(), ['object_id' => 'id']);
     }
 
     /**
@@ -134,7 +117,7 @@ class CcObjects extends \yii\db\ActiveRecord
      */
     public function getServices()
     {
-        // return $this->hasMany(CcServices::className(), ['object_id' => 'id']);
+        return $this->hasMany(CcServices::className(), ['object_id' => 'id']);
     }
 
     /**
@@ -160,14 +143,6 @@ class CcObjects extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CcObjects::className(), ['object_id' => 'object_id'])->andWhere('id != '.$this->id)->orderBy(['name' => SORT_ASC]);
         //return $this->parent->children;
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getServicesObjectContainers()
-    {
-        //return $this->hasMany(CcServiceObjectContainers::className(), ['object_container_id' => 'id']);
     }
 
     /**
@@ -311,29 +286,13 @@ class CcObjects extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrderObjectModels()
-    {
-        return $this->hasMany(OrderServiceObjectModels::className(), ['object_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPresentationObjectModels()
-    {
-        return $this->hasMany(PresentationObjectModels::className(), ['object_model_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getTranslation()
     {
-        /*$object_translation = CcObjectsTranslation::find()->where('lang_code="SR" and object_id='.$this->id)->one();
-        if($object_translation) {
-            return $object_translation;
+        $action_translation = Translations::find()->where('lang_code="SR" and entity="object" and entity_id='.$this->id)->one();
+        if($action_translation) {
+            return $action_translation;
         }
-        return false;   */       
+        return false;      
     }
 
     /**
@@ -344,7 +303,161 @@ class CcObjects extends \yii\db\ActiveRecord
         if($this->getTranslation()) {
             return $this->getTranslation()->name;
         }       
-        return false;   
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNameGen()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_gen;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNameDat()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_dat;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNameAkk()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_akk;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNameInst()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_inst;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNamePl()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_pl;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNamePlGen()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_pl_gen;
+        }       
+        return $this->name;   
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGender()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_gender;
+        }       
+        return 'n';   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->description;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubtext()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->subtext;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHint()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->hint;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTitle()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->title;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubtitle()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->subtitle;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNote()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->note;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddNote()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->additional_note;
+        }       
+        return $this->name;   
     }
 
     /**
@@ -353,105 +466,6 @@ class CcObjects extends \yii\db\ActiveRecord
     public function getSCaseName()
     {
         return Yii::$app->operator->sentenceCase($this->tName); 
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTNameGen()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->name_gen;
-        }       
-        return false;   
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTNameDat()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->name_dat;
-        }       
-        return false;   
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTNameAkk()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->name_akk;
-        }       
-        return false;   
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTNameInst()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->name_inst;
-        }       
-        return false;   
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTNamePl()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->name_pl;
-        }       
-        return false;   
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTNamePlGen()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->name_pl_gen;
-        }       
-        return false;   
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTGender()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->name_gender;
-        }       
-        return false;   
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTHint()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->hint;
-        }       
-        return false;   
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTDescription()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->description;
-        }       
-        return false;   
     }
 
     /**

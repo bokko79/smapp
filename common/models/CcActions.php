@@ -12,7 +12,6 @@ use Yii;
  * @property integer $object_mode
  * @property string $status
  *
- * @property CcActionsTranslation[] $ccActionsTranslations
  * @property CcMethods[] $ccMethods
  * @property CcServices[] $ccServices
  */
@@ -35,7 +34,7 @@ class CcActions extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['object_mode'], 'integer'],
             [['status'], 'string'],
-            [['name'], 'string', 'max' => 64]
+            [['name'], 'string', 'max' => 64],
         ];
     }
 
@@ -50,14 +49,6 @@ class CcActions extends \yii\db\ActiveRecord
             'object_mode' => 'Parametar koji označava da li akcija sadrži više usluga. 0 - Akcija ima samo jednu  uslugu; 1 - Akcija ima više od jedne usluge.',
             'status' => 'Status aktivnosti.',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getT()
-    {
-        return $this->hasMany(CcActionsTranslation::className(), ['action_id' => 'id']);
     }
 
     /**
@@ -90,11 +81,11 @@ class CcActions extends \yii\db\ActiveRecord
      */
     public function getTranslation()
     {
-        /*$action_translation = CcActionsTranslation::find()->where('lang_code="SR" and action_id='.$this->id)->one();
+        $action_translation = Translations::find()->where('lang_code="SR" and entity="action" and entity_id='.$this->id)->one();
         if($action_translation) {
             return $action_translation;
         }
-        return false; */       
+        return false;      
     }
 
     /**
@@ -105,62 +96,161 @@ class CcActions extends \yii\db\ActiveRecord
         if($this->getTranslation()) {
             return $this->getTranslation()->name;
         }       
-        return false;   
+        return $this->name;   
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTNameGen()
+    public function getNameGen()
     {
         if($this->getTranslation()) {
             return $this->getTranslation()->name_gen;
         }       
-        return false;   
+        return $this->name;   
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTNameDat()
+    public function getNameDat()
     {
         if($this->getTranslation()) {
             return $this->getTranslation()->name_dat;
         }       
-        return false;   
+        return $this->name;   
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTNameAkk()
+    public function getNameAkk()
     {
         if($this->getTranslation()) {
             return $this->getTranslation()->name_akk;
         }       
-        return false;   
+        return $this->name;   
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTNameInst()
+    public function getNameInst()
     {
         if($this->getTranslation()) {
             return $this->getTranslation()->name_inst;
         }       
-        return false;   
+        return $this->name;   
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTGender()
+    public function getNamePl()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_pl;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNamePlGen()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_pl_gen;
+        }       
+        return $this->name;   
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGender()
     {
         if($this->getTranslation()) {
             return $this->getTranslation()->name_gender;
         }       
-        return false;   
+        return 'n';   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->description;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubtext()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->subtext;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHint()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->hint;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTitle()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->title;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubtitle()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->subtitle;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNote()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->note;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddNote()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->additional_note;
+        }       
+        return $this->name;   
     }
 
     /**

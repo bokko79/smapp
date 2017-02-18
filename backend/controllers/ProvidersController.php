@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\CcProviders;
 use common\models\CcProvidersSearch;
+use common\models\Translations;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -66,11 +67,15 @@ class ProvidersController extends Controller
     public function actionView($id)
     {
         $query = \common\models\CcProviderProperties::find()->where(['provider_id' => $id]);
+        $industries = \common\models\CcIndustryProviders::find()->where(['provider_id' => $id]);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
             'properties' => new ActiveDataProvider([
                 'query' => $query,
+            ]),
+            'industries' => new ActiveDataProvider([
+                'query' => $industries,
             ]),
         ]);
     }
@@ -83,25 +88,24 @@ class ProvidersController extends Controller
     public function actionCreate()
     {
         $model = new CcProviders();
-        //$model_trans = new CcIndustriesTranslation();
+        $trans = new Translations();
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/) {
+        if ($model->load(Yii::$app->request->post()) and $trans->load(Yii::$app->request->post())) {
            
             if($model->save()){
                 if ($model->imageFile) {
                     $model->upload();
                 }
-                /*$model_trans->industry_id = $model->id;
-                $model_trans->orig_name = $model->name;
-                $model_trans->save();*/
-
-                    return $this->redirect(['view', 'id' => $model->id]);
-                //}
+                $trans->entity = 'provider';
+                $trans->entity_id = $model->id;
+                $trans->lang_code = 'SR';
+                $trans->save();
+                return $this->redirect(['view', 'id' => $model->id]);  
             }            
         } else {
             return $this->render('create', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }
@@ -115,9 +119,9 @@ class ProvidersController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        //$model_trans = $model->translation;
+        $trans = $model->translation ? $model->translation : new Translations();
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/) {
+        if ($model->load(Yii::$app->request->post()) and $trans->load(Yii::$app->request->post())) {
             
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
@@ -126,14 +130,15 @@ class ProvidersController extends Controller
             if ($model->imageFile and $image = $model->upload()) {
                 $model->file_id = $image->id;
             }
-            //$model_trans->save();
-
-            return $this->redirect(['view', 'id' => $model->id]);
-                
+            $trans->entity = 'provider';
+            $trans->entity_id = $model->id;
+            $trans->lang_code = 'SR';
+            $trans->save();
+            return $this->redirect(['view', 'id' => $model->id]);                  
         } else {
             return $this->render('update', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }

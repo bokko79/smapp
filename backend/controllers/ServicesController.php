@@ -5,6 +5,8 @@ namespace backend\controllers;
 use Yii;
 use common\models\CcServices;
 use common\models\CcServicesSearch;
+use common\models\CcServiceQuantities;
+use common\models\Translations;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -85,17 +87,27 @@ class ServicesController extends Controller
     public function actionCreate()
     {
         $model = new CcServices();
+        $modelQuantities = new CcServiceQuantities();
+        $trans = new Translations();
 
         if($services = Yii::$app->request->get('CcServices')){
             $model->object_id = !empty($services['object_id']) ? $services['object_id'] : null;
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) and $model->save() and $trans->load(Yii::$app->request->post())) {
+           /* $modelQuantities->service_id = $model->id;
+            $modelQuantities->save();*/
+
+            $trans->entity = 'service';
+            $trans->entity_id = $model->id;
+            $trans->lang_code = 'SR';
+            $trans->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
                 'modelQuantities' => $modelQuantities,
+                'trans' => $trans,
             ]);
         }
     }
@@ -109,12 +121,23 @@ class ServicesController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $modelQuantities = $model->quantities ? $model->quantities : new CcServiceQuantities();
+        $trans = $model->translation ? $model->translation : new Translations();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save() and $trans->load(Yii::$app->request->post())) {
+            /*$modelQuantities->service_id = $model->id;
+            $modelQuantities->save();*/
+
+            $trans->entity = 'service';
+            $trans->entity_id = $model->id;
+            $trans->lang_code = 'SR';
+            $trans->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'modelQuantities' => $modelQuantities,
+                'trans' => $trans,
             ]);
         }
     }

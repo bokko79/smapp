@@ -124,19 +124,11 @@ class CcProperties extends \yii\db\ActiveRecord
      */
     public function getTranslation()
     {
-       /* $property_translation = \common\models\CcPropertiesTranslation::find()->where('lang_code="SR" and property_id='.$this->id)->one();
-        if($property_translation) {
-            return $property_translation;
+        $action_translation = Translations::find()->where('lang_code="SR" and entity="property" and entity_id='.$this->id)->one();
+        if($action_translation) {
+            return $action_translation;
         }
-        return false; */       
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getT()
-    {
-        return $this->hasMany(CcPropertiesTranslation::className(), ['property_id' => 'id']);
+        return false;      
     }
 
     /**
@@ -147,7 +139,161 @@ class CcProperties extends \yii\db\ActiveRecord
         if($this->getTranslation()) {
             return $this->getTranslation()->name;
         }       
-        return false;   
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNameGen()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_gen;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNameDat()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_dat;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNameAkk()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_akk;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNameInst()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_inst;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNamePl()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_pl;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNamePlGen()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_pl_gen;
+        }       
+        return $this->name;   
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGender()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->name_gender;
+        }       
+        return 'n';   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDescription()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->description;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubtext()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->subtext;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHint()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->hint;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTitle()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->title;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubtitle()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->subtitle;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNote()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->note;
+        }       
+        return $this->name;   
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddNote()
+    {
+        if($this->getTranslation()) {
+            return $this->getTranslation()->additional_note;
+        }       
+        return $this->name;   
     }
 
     /**
@@ -157,39 +303,6 @@ class CcProperties extends \yii\db\ActiveRecord
     {
         return Yii::$app->operator->sentenceCase($this->tName); 
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLabel()
-    {
-        if($this->getTranslation()) {
-            return Yii::$app->operator->sentenceCase($this->getTranslation()->name);
-        }       
-        return false;   
-    }  
-
-     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTNameAkk()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->name_akk;
-        }       
-        return false;   
-    } 
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTHint()
-    {
-        if($this->getTranslation()) {
-            return $this->getTranslation()->hint;
-        }       
-        return false;   
-    } 
 
     /**
      * @return \yii\db\ActiveQuery

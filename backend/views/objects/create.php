@@ -11,4 +11,5 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/'], 'clas
 
 <?= $this->render('_form', [
     'model' => $model,
+    'model_trans' => $model_trans,
 ]) ?>

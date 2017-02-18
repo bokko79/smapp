@@ -115,10 +115,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <td><?= $model->favour==1 ? 'Yes' : 'No' ?></td>
                                     </tr>
                                     <tr><td>Hint</td>
-                                        <td><?= $model->tHint ?></td>
+                                        <td><?= $model->hint ?></td>
                                     </tr>
                                     <tr><td>Description</td>
-                                        <td><?= $model->tDescription ?></td>
+                                        <td><?= $model->description ?></td>
                                     </tr>
                                 </table>
                             </div>

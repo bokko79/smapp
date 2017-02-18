@@ -13,7 +13,7 @@ namespace frontend\controllers;
 
 use dektrium\user\Finder;
 use dektrium\user\models\Account;
-use dektrium\user\models\LoginForm;
+use common\models\LoginForm;
 use dektrium\user\models\User;
 use dektrium\user\Module;
 use dektrium\user\traits\AjaxValidationTrait;
@@ -47,6 +47,36 @@ class SecurityController extends SecController
     {
           $this->on(self::EVENT_AFTER_LOGIN, [$this, 'updateLoginData']);
           $this->on(self::EVENT_AFTER_LOGIN, [$this, 'afterLogin']);
+    }
+
+    /**
+     * Displays the login page.
+     *
+     * @return string|Response
+     */
+    public function actionLogin()
+    {
+        if (!\Yii::$app->user->isGuest) {
+            $this->goHome();
+        }
+
+        /** @var LoginForm $model */
+        $model = \Yii::createObject(LoginForm::className());
+        $event = $this->getFormEvent($model);
+
+        $this->performAjaxValidation($model);
+
+        $this->trigger(self::EVENT_BEFORE_LOGIN, $event);
+
+        if ($model->load(\Yii::$app->getRequest()->post()) && $model->login()) {
+            $this->trigger(self::EVENT_AFTER_LOGIN, $event);
+            return $this->goBack();
+        }
+
+        return $this->render('login', [
+            'model'  => $model,
+            'module' => $this->module,
+        ]);
     }
 
     public function updateLoginData($event){

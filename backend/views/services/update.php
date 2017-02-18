@@ -11,8 +11,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->tName, 'url' => ['view', 'i
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 
-    <h2><?= Html::encode($this->title) ?></h2>
+<h2><?= Html::encode($this->title) ?></h2>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+<?= $this->render('_form', [
+    'model' => $model,
+	//'modelQuantities' => $modelQuantities,
+	'model_trans' => $model_trans,
+]) ?>

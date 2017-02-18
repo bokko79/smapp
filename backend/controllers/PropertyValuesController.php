@@ -5,7 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\CcPropertyValues;
 use common\models\CcPropertyValuesSearch;
-use common\models\CcPropertyValuesTranslation;
+use common\models\Translations;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -78,24 +78,24 @@ class PropertyValuesController extends Controller
     public function actionCreate()
     {
         $model = new CcPropertyValues();
-        //$model_trans = new CcPropertyValuesTranslation();
+        $trans = new Translations();
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/) {
+        if ($model->load(Yii::$app->request->post()) and $trans->load(Yii::$app->request->post())) {
             
             if($model->save()){
                 if ($model->imageFile) {
                     $model->upload();
                 }
-                /*$model_trans->property_value_id = $model->id;
-                $model_trans->orig_name = $model->name;
-                $model_trans->save();*/
-                    
-                return $this->redirect(['view', 'id' => $model->id]);
+                $trans->entity = 'property_value';
+                $trans->entity_id = $model->id;
+                $trans->lang_code = 'SR';
+                $trans->save();
+                return $this->redirect(['view', 'id' => $model->id]); 
             }            
         } else {
             return $this->render('create', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }
@@ -109,9 +109,9 @@ class PropertyValuesController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        //$model_trans = $model->translation;
+        $trans = $model->translation ? $model->translation : new Translations();
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/) {
+        if ($model->load(Yii::$app->request->post()) and $trans->load(Yii::$app->request->post())) {
 
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
@@ -121,13 +121,16 @@ class PropertyValuesController extends Controller
                 $model->file_id = $image->id;
             }
 
-            //$model_trans->save();
+            $trans->entity = 'property_value';
+            $trans->entity_id = $model->id;
+            $trans->lang_code = 'SR';
+            $trans->save();
             return $this->redirect(['view', 'id' => $model->id]);
                 
         } else {
             return $this->render('update', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }

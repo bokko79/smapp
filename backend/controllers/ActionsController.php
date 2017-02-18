@@ -4,8 +4,8 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\CcActions;
-use common\models\CcActionsTranslation;
 use common\models\CcActionsSearch;
+use common\models\Translations;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -82,20 +82,20 @@ class ActionsController extends Controller
     public function actionCreate()
     {
         $model = new CcActions();
-        //$model_trans = new CcActionsTranslation();
+        $trans = new Translations();
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/) {
+        if ($model->load(Yii::$app->request->post()) and $trans->load(Yii::$app->request->post())) {
             if($model->save()){
-                /*$model_trans->action_id = $model->id;
-                $model_trans->orig_name = $model->name;
-                $model_trans->save();*/
-                
+                $trans->entity = 'action';
+                $trans->entity_id = $model->id;
+                $trans->lang_code = 'SR';
+                $trans->save();                
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             return $this->render('create', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }
@@ -109,18 +109,18 @@ class ActionsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        //$model_trans = $model->translation;
+        $trans = $model->translation ? $model->translation : new Translations();
 
-        if ($model->load(Yii::$app->request->post())/* and $model_trans->load(Yii::$app->request->post())*/) {
-            
-            $model->save();
-            /*$model_trans->save();*/
-
+        if ($model->load(Yii::$app->request->post()) and $model->save() and $trans->load(Yii::$app->request->post())) {
+            $trans->entity = 'action';
+            $trans->entity_id = $model->id;
+            $trans->lang_code = 'SR';
+            $trans->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
-                //'model_trans' => $model_trans,
+                'model_trans' => $trans,
             ]);
         }
     }

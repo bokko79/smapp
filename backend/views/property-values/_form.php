@@ -20,12 +20,6 @@ use kartik\widgets\FileInput;
 
     <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
 
-    <?php /* $form->field($model_trans, 'name')->input('text') ?>
-
-    <?= $form->field($model_trans, 'hint')->textArea(['rows'=>4]) ?>
-
-    <?= $form->field($model_trans, 'name_akk')->input('text') */ ?>
-
     <?= $form->field($model, 'property_id')->widget(Select2::classname(), [
             'data' => ArrayHelper::map(\common\models\CcProperties::find()->all(), 'id', 'name'),
             'options' => ['placeholder' => 'Izaberite...'],
@@ -68,6 +62,25 @@ use kartik\widgets\FileInput;
 
     <?= $form->field($model, 'video_link')->textInput(['maxlength' => true]) ?>
 
+    <hr>
+    <h4>Translations</h4>
+    <?= $form->field($model_trans, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_gen')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_dat')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_akk')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_inst')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_pl')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_pl_gen')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'name_gender')->dropDownList(['m' => 'muški', 'f' => 'ženski', 'n' => 'srednji'], ['style'=>'width:50%']) ?>
+    <hr>
+    <?= $form->field($model_trans, 'description')->textArea() ?>
+    <?= $form->field($model_trans, 'subtext')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'hint')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'subtitle')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'note')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_trans, 'additional_note')->textInput(['maxlength' => true]) ?>
+    <hr>  
     
     <div class="row" style="margin:20px;">
         <div class="col-md-offset-3">
