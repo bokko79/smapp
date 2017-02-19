@@ -43,14 +43,15 @@ AppAsset::register($this);
         ['label' => 'Services', 'url' => ['/services/view/1']],
         ['label' => 'Log', 'url' => ['/site/log']],
         ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-        //['label' => 'Dashboard', 'url' => ['/dashboard/home?username='.Yii::$app->user->identity->username]],
+        ['label' => 'Contact', 'url' => ['/site/contact']],        
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/user/registration/register']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/user/security/login']];
     } else {
+        $menuItems[] = ['label' => Yii::$app->user->identity->username, 'url' => ['/user/security/home', 'username'=>Yii::$app->user->identity->username]];
         $menuItems[] = ['label' => 'Settings', 'url' => ['/user/settings/account']];
+        
         $menuItems[] = '<li>'
             . Html::beginForm(['/user/security/logout'], 'post')
             . Html::submitButton(

@@ -1,9 +1,11 @@
 <?php
 
 /*
- * This file is part of the Dektrium project.
+ * C112 - Dashboard Setup Account page.
  *
- * (c) Dektrium project <http://github.com/dektrium>
+ * This file is part of the Servicemapp project.
+ *
+ * (c) Servicemapp project <http://github.com/bokko79/servicemapp>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
@@ -33,7 +35,6 @@ $currencies = ArrayHelper::map(\common\models\CcCurrencies::find()->all(), 'id',
 <div class="row">
     <div class="col-md-3">
         <?= $this->render('_menu') ?>
-        <?= Html::a('Create new profile', Url::to(), ['class'=>'btn btn-warning', 'data-toggle'=>'modal', 'data-backdrop'=>false,  'data-target'=>'#choose-profile-type']) ?>
     </div>
     <div class="col-md-9">
         <div class="panel panel-default">
@@ -107,36 +108,5 @@ $currencies = ArrayHelper::map(\common\models\CcCurrencies::find()->all(), 'id',
                 </div>
             </div>
         <?php endif ?>
-        <?php if ($model->module->enableAccountDelete): ?>
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><?= Yii::t('user', 'Delete account') ?></h3>
-                </div>
-                <div class="panel-body">
-                    <p>
-                        <?= Yii::t('user', 'Once you delete your account, there is no going back') ?>.
-                        <?= Yii::t('user', 'It will be deleted forever') ?>.
-                        <?= Yii::t('user', 'Please be certain') ?>.
-                    </p>
-                    <?= Html::a(Yii::t('user', 'Delete account'), ['delete'], [
-                        'class'        => 'btn btn-danger',
-                        'data-method'  => 'post',
-                        'data-confirm' => Yii::t('user', 'Are you sure? There is no going back'),
-                    ]) ?>
-                </div>
-            </div>
-        <?php endif ?>
     </div>
 </div>
-
-<?php Modal::begin([
-        'id'=>'choose-profile-type',
-        'size'=>Modal::SIZE_SMALL,
-        'class'=>'overlay_modal',
-        'header'=> 'choose-profile-type',
-    ]); ?>
-        <?= Html::a('Individual profile', Url::to(['profile/create', 'type'=>'occupation']), ['class'=>'btn btn-link']) ?>
-        <br>
-        <?= Html::a('Company profile', Url::to(['profile/create', 'type'=>'enterprise']), ['class'=>'btn btn-link']) ?>
-<?php Modal::end();
-?>

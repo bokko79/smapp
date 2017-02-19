@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Dektrium project.
+ * This file is part of the Servicemapp project.
  *
- * (c) Dektrium project <http://github.com/dektrium/>
+ * (c) Servicemapp project <http://github.com/bokko79/servicemapp>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.

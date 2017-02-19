@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Servicemapp project.
+ *
+ * (c) Servicemapp project <http://github.com/bokko79/servicemapp>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace frontend\controllers;
 
 use Yii;
@@ -47,7 +56,9 @@ class ProvidersController extends Controller
     }
 
     /**
-     * Displays a single CcIndustries model.
+     * D07 - Provider's home page.
+     *
+     * Displays a single CcProviders model.
      * @param integer $id
      * @return mixed
      */
@@ -55,8 +66,13 @@ class ProvidersController extends Controller
     {
         $this->trigger(self::EVENT_AFTER_VISIT, new yii\base\Event(['sender' => $id]));
 
+        $searchModel = new CcProvidersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

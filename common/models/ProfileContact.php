@@ -31,10 +31,15 @@ class ProfileContact extends ActiveRecord
     /** @var \dektrium\user\Module */
     protected $module;
 
+    const BEFORE_CREATE   = 'beforeCreate';
+    const AFTER_CREATE   = 'afterCreate';
+
     /** @inheritdoc */
     public function init()
     {
         $this->module = \Yii::$app->getModule('user');
+        $this->on(self::BEFORE_CREATE, [$this, 'beforeCreate']);
+        $this->on(self::AFTER_CREATE, [$this, 'afterCreate']);
     }
 
     /**
@@ -82,26 +87,32 @@ class ProfileContact extends ActiveRecord
     {
         switch ($this->contact_type) {
             case 1:
-                $contactType = 'E-mail address';
+                $eventCode = 'E-mail address';
                 break;
             case 2:
-                $contactType = 'Phone';
+                $eventCode = 'Phone';
                 break;
             case 3:
-                $contactType = 'Fax';
+                $eventCode = 'Fax';
                 break;
             case 4:
-                $contactType = 'Home address';
+                $eventCode = 'Home address';
                 break;
             case 5:
-                $contactType = 'Skype IM';
+                $eventCode = 'Skype IM';
                 break;           
             
             default:
-                $eventCode['name'] = 'Contact';
+                $eventCode = 'Contact';
                 break;
         }
 
         return $eventCode;
+    }
+
+    /** @inheritdoc */
+    public function beforeCreate($event)
+    {
+        //$this->user_id = \Yii::$app->user->id;
     }
 }

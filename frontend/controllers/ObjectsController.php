@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Servicemapp project.
+ *
+ * (c) Servicemapp project <http://github.com/bokko79/servicemapp>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace frontend\controllers;
 
 use Yii;
@@ -50,6 +59,8 @@ class ObjectsController extends Controller
     
 
     /**
+     * D03 - Object's home page.
+     *
      * Displays a single CcObjects model.
      * @param string $id
      * @return mixed
@@ -77,6 +88,9 @@ class ObjectsController extends Controller
             }
         }
 
+        $searchModel = new CcObjectsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $this->trigger(self::EVENT_AFTER_VISIT, new yii\base\Event(['sender' => $id]));
 
         return $this->render('view', [
@@ -93,6 +107,8 @@ class ObjectsController extends Controller
             'services' => new ActiveDataProvider([
                 'query' => $services,
             ]),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

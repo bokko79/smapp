@@ -1,9 +1,21 @@
 <?php
 
+/*
+ * C01 - Dashboard Home page.
+ *
+ * This file is part of the Servicemapp project.
+ *
+ * (c) Servicemapp project <http://github.com/bokko79/servicemapp>
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 use kartik\widgets\ActiveForm;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 
@@ -11,9 +23,11 @@ $this->title = 'Servicemapp';
 $formatter = \Yii::$app->formatter;
 ?>
 Zdravo <?= $model->username ?>. Ovo je tvoj dashboard.
-
+<?= Html::a('Create new profile', Url::to(), ['class'=>'btn btn-warning', 'data-toggle'=>'modal', 'data-backdrop'=>false,  'data-target'=>'#choose-profile-type']) ?>
 <div class="row">
     <div class="col-lg-3">
+    
+
         <h2>Login Data</h2>
 
         <b>User registration IP:</b> <?= \Yii::$app->request->userIP ?><br>
@@ -54,7 +68,7 @@ Zdravo <?= $model->username ?>. Ovo je tvoj dashboard.
     <div class="col-lg-3">
         <h2>Profiles</h2>
         <?php foreach($profiles as $profile){
-        		echo $profile->name;
+        		echo Html::a($profile->id. ($profile->type==1 ? 'private' : 'public'), Url::to(['profile/home', 'id'=>$profile->id]));
 
         	} ?>
     </div>
@@ -80,3 +94,15 @@ Zdravo <?= $model->username ?>. Ovo je tvoj dashboard.
         
     </div>
 </div>
+
+<?php Modal::begin([
+        'id'=>'choose-profile-type',
+        'size'=>Modal::SIZE_SMALL,
+        'class'=>'overlay_modal',
+        'header'=> 'choose-profile-type',
+    ]); ?>
+        <?= Html::a('Individual profile', Url::to(['profile/create', 'type'=>'occupation']), ['class'=>'btn btn-link']) ?>
+        <br>
+        <?= Html::a('Company profile', Url::to(['profile/create', 'type'=>'enterprise']), ['class'=>'btn btn-link']) ?>
+<?php Modal::end();
+?>

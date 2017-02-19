@@ -1,6 +1,8 @@
 <?php
 
 /*
+ * D01 - Search Results page.
+ *
  * This file is part of the Servicemapp project.
  *
  * (c) Servicemapp project <http://github.com/bokko79/servicemapp/>

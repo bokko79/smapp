@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-use dektrium\user\models\User;
+use common\models\UserAccount;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -61,7 +61,7 @@ class Log extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(UserAccount::className(), ['id' => 'user_id']);
     }
 
     public function logEvent($event, $subject=null, $object=null)

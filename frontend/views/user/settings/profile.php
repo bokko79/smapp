@@ -1,9 +1,11 @@
 <?php
 
 /*
- * This file is part of the Dektrium project.
+ * C114 - Dashboard Setup Data: User Objects Setup page.
  *
- * (c) Dektrium project <http://github.com/dektrium>
+ * This file is part of the Servicemapp project.
+ *
+ * (c) Servicemapp project <http://github.com/bokko79/servicemapp>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
@@ -26,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= $this->render('/_alert', ['module' => Yii::$app->getModule('user')]) ?>
 
-<div class="row">4444
+<div class="row">
     <div class="col-md-3">
         <?= $this->render('_menu') ?>
     </div>
@@ -70,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ->field($model, 'gravatar_email')
                     ->hint(Html::a(Yii::t('user', 'Change your avatar at Gravatar.com'), 'http://gravatar.com')) ?>
 
-                <?= $form->field($model, 'bio')->textarea() ?>
+                <?= $form->field($model, 'about')->textarea() ?>
 
                 <div class="form-group">
                     <div class="col-lg-offset-3 col-lg-9">

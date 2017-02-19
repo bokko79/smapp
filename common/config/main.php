@@ -31,6 +31,7 @@ return [
                 'security'      => 'frontend\controllers\SecurityController',
                 'settings'      => 'frontend\controllers\SettingsController',
                 'profile'      => 'frontend\controllers\ProfileController',
+                'bookmarks'      => 'frontend\controllers\BookmarksController',
             ],
             // overriding models dektrium
             'modelMap' => [

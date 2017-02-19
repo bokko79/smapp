@@ -130,7 +130,9 @@ class UserAccount extends BaseUser
      */
     public function getProfiles()
     {
-        return $this->hasMany($this->module->modelMap['Profile'], ['user_id' => 'id'])->all();
+        //return $this->hasMany($this->module->modelMap['Profile'], ['user_id' => 'id'])->all();
+        return $this->hasMany(Profile::className(), ['user_id' => 'id']);
+        // return \common\models\Profile::find()->where(['user_id'=>\Yii::$app->user->id])->all();
     }
 
     /**
@@ -247,7 +249,7 @@ class UserAccount extends BaseUser
                 $this->_profile = \Yii::createObject(Profile::className());                
             }
             $this->_profile->link('user', $this);
-            $profileContact = new \dektrium\user\models\ProfileContact();
+            $profileContact = new \common\models\ProfileContact();
             $profileContact->profile_id = $this->_profile->id;
             $profileContact->contact_type = 1;
             $profileContact->contact_value = $this->email;

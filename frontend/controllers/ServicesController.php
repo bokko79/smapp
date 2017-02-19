@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Servicemapp project.
+ *
+ * (c) Servicemapp project <http://github.com/bokko79/servicemapp>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace frontend\controllers;
 
 use Yii;
@@ -51,6 +60,8 @@ class ServicesController extends Controller
     }
 
     /**
+     * D02 - Service's home page.
+     *
      * Displays a single CcServices model.
      * @param integer $id
      * @return mixed
@@ -67,9 +78,14 @@ class ServicesController extends Controller
         }
         $this->bookmarkingService($model, $bookmark);
 
+        $searchModel = new CcServicesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('view', [
             'model' => $model,
             'bookmark' => $bookmark,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

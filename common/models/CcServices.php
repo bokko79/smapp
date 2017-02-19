@@ -67,6 +67,7 @@ use yii\imagine\Image;
 class CcServices extends \yii\db\ActiveRecord
 {
     public $imageFile;
+    public $provider; // C03 - Create New Profile page.
 
     /**
      * @inheritdoc

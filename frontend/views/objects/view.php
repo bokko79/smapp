@@ -1,9 +1,21 @@
 <?php
 
+/*
+ * D03 - Object's profile (home) page.
+ *
+ * This file is part of the Servicemapp project.
+ *
+ * (c) Servicemapp project <http://github.com/bokko79/servicemapp/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use yii\widgets\ListView;
 use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
@@ -102,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         Hint
                                     </td>
                                     <td>
-                                        <?= $model->tHint ?>
+                                        <?= $model->hint ?>
                                     </td>
                                 </tr>
                                 <tr>
@@ -110,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         Description
                                     </td>
                                     <td>
-                                        <?= $model->tDescription ?>
+                                        <?= $model->description ?>
                                     </td>
                                 </tr>
                             </table>
@@ -121,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td class="media-area 200">
                         <div >                
                             <div class="image">
-                                <?php /* Html::img('/images/objects/'.$model->file->ime) */ ?>
+                                <?php /* Html::img('/images/objects/'.$model->file->name) */ ?>
                             </div>
                         </div> 
                     </td>
@@ -134,7 +146,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="row">
-
     <div class="col-sm-12">
         <div class="card_container record-full grid-item fadeInUp animated" id="properties">
             <div class="primary-context gray normal">
@@ -246,6 +257,26 @@ $this->params['breadcrumbs'][] = $this->title;
             
     </div>
         
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'id',
+                    'name',
+                ],
+            ]) ?>
+        </div>
+        <div class="col-lg-4">
+            <?= ListView::widget([
+                'dataProvider' => $dataProvider,
+                'itemView' => '_card',
+            ]) ?>
+        </div>
+    </div>
 </div>
 
 <?php 

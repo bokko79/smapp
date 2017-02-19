@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * B06 - Error page. site/error
+ *
+ * This file is part of the Servicemapp project.
+ *
+ * (c) Servicemapp project <http://github.com/bokko79/servicemapp>
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 /* @var $this yii\web\View */
 /* @var $name string */
 /* @var $message string */
